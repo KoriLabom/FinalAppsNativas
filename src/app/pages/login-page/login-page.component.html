@@ -1,1 +1,61 @@
-<p>login-page works!</p>
+<div class="container py-5" style="max-width: 520px;">
+
+    <div class="text-center mb-4">
+        <a routerLink="/" class="text-decoration-none">
+            <h1 class="h3 fw-bold mb-0">
+                Restaur<span class="brand-hub">Hub</span>
+            </h1>
+        </a>
+        <p class="text-muted mt-2">Ingresá con tu cuenta de restaurante</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre del restaurante</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        formControlName="restaurantName"
+                        placeholder="Ej: La Trattoria">
+                    <div class="form-text text-danger" *ngIf="f['restaurantName'].touched && f['restaurantName'].invalid">
+                        Ingresá un nombre válido (mínimo 3 caracteres).
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        formControlName="password"
+                        placeholder="••••••••">
+                    <div class="form-text text-danger" *ngIf="f['password'].touched && f['password'].invalid">
+                        La contraseña es requerida (mínimo 4 caracteres).
+                    </div>
+                </div>
+
+                <div class="alert alert-danger py-2" *ngIf="errorMsg">
+                    {{ errorMsg }}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+                    <span *ngIf="!loading">Ingresar</span>
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span *ngIf="loading" class="ms-2">Ingresando...</span>
+                </button>
+
+            </form>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">¿No tenés cuenta?</small>
+                <a routerLink="/register" class="ms-1">Crear cuenta</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
