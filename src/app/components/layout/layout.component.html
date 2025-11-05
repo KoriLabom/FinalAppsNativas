@@ -1,2 +1,62 @@
-<p>layout works!</p>
-<router-outlet></router-outlet>
+<div class="d-flex flex-column min-vh-100">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+      <a class="navbar-brand fw-bold " routerLink="/">
+  <span class="m-1">Restaur</span><span class="brand-hub">Hub</span>
+</a>
+
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/restaurants">Restaurantes</a>
+          </li>
+
+          <!-- Mostrar solo si usuario es dueño (ej: usar ngIf cuando lo conectes al auth) -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/products">Administrar Productos</a>
+          </li>
+
+        </ul>
+
+        <!-- Lado derecho -->
+        <ul class="navbar-nav ms-auto">
+
+          <!-- placeholder: cuando implementes auth, cambiarás esto -->
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Iniciar Sesión</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register">Registrarse</a>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-grow-1 py-4">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-light text-center py-3 border-top text-muted">
+    <small>© 2025 RestaurantHub</small>
+  </footer>
+
+</div>

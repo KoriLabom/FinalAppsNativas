@@ -1,1 +1,73 @@
-<p>home-page works!</p>
+<div class="container py-5">
+
+  <!-- Hero -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">¿Qué vas a comer hoy?</h1>
+    <p class="lead text-muted">
+      Descubrí restaurantes cerca tuyo y explorá sus menús en segundos.
+    </p>
+    <a routerLink="/restaurants" class="btn btn-primary btn-lg mt-3">
+      Ver Restaurantes
+    </a>
+  </div>
+
+  <!-- Línea divisoria -->
+  <hr class="my-5">
+
+  <!-- Sección destacados (placeholder, lo vas a llenar cuando tengas productos) -->
+  <section>
+    <h2 class="fw-semibold text-center mb-4">Productos Destacados</h2>
+
+    <div class="row g-4 justify-content-center">
+
+      <!-- CARD 1 -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Producto destacado">
+          <div class="card-body">
+            <h5 class="card-title">Nombre del Producto</h5>
+            <p class="card-text text-muted small">
+              Descripción breve del producto.
+            </p>
+            <span class="badge bg-warning text-dark">Destacado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Producto destacado">
+          <div class="card-body">
+            <h5 class="card-title">Nombre del Producto</h5>
+            <p class="card-text text-muted small">
+              Descripción breve del producto.
+            </p>
+            <span class="badge bg-danger">Descuento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Producto destacado">
+          <div class="card-body">
+            <h5 class="card-title">Nombre del Producto</h5>
+            <p class="card-text text-muted small">
+              Descripción breve del producto.
+            </p>
+            <span class="badge bg-success">Happy Hour</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-4 mt-5 border-top">
+  <p class="text-muted small mb-0">RestaurantApp. Todos los derechos reservados.</p>
+</footer>
