@@ -1,61 +1,59 @@
-<div class="container py-5" style="max-width: 520px;">
+<div class="container d-flex justify-content-center align-items-center py-5" style="max-width: 480px;">
 
-    <div class="text-center mb-4">
-        
-            <h1 class="h3 fw-bold mb-0 bg-dark p-4 rounded">
-                <span class="m-1 fw-bold text-light ">Resto</span><span class="brand-hub">Hub</span>
-            </h1>
+  <form (ngSubmit)="login(logInForm.value)" #logInForm="ngForm" class="w-100 p-4 border rounded shadow-sm bg-white">
     
-        <p class="text-muted mt-2">Ingresá con tu cuenta de restaurante</p>
+    <h1 class="h3 text-center mb-4 fw-bold bg-dark rounded">
+      <span class="m-1 text-light">Resto</span><span class="brand-hub">Hub</span>
+    </h1>
+
+    <div class="mb-3">
+      <label for="restaurantName" class="form-label">Nombre del restaurante</label>
+      <input 
+        type="text" 
+        name="restaurantName"
+        id="restaurantName" 
+        ngModel 
+        required="true"
+        maxlength="50"
+        class="form-control"
+        placeholder="Ej: La Trattoria">
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-
-            <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-
-                <div class="mb-3">
-                    <label class="form-label">Nombre del restaurante</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        formControlName="restaurantName"
-                        placeholder="Ej: La Trattoria">
-                    <div class="form-text text-danger" *ngIf="f['restaurantName'].touched && f['restaurantName'].invalid">
-                        Ingresá un nombre válido (mínimo 3 caracteres).
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        class="form-control"
-                        formControlName="password"
-                        placeholder="••••••••">
-                    <div class="form-text text-danger" *ngIf="f['password'].touched && f['password'].invalid">
-                        La contraseña es requerida (mínimo 4 caracteres).
-                    </div>
-                </div>
-
-                <div class="alert alert-danger py-2" *ngIf="errorMsg">
-                    {{ errorMsg }}
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
-                    <span *ngIf="!loading">Ingresar</span>
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span *ngIf="loading" class="ms-2">Ingresando...</span>
-                </button>
-
-            </form>
-
-            <div class="text-center mt-3">
-                <small class="text-muted">¿No tenés cuenta?</small>
-                <a routerLink="/register" class="ms-1">Crear cuenta</a>
-            </div>
-
-        </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input 
+        type="password" 
+        name="password"
+        id="password" 
+        ngModel 
+        required="true"
+        minlength="4"
+        class="form-control"
+        placeholder="••••••••">
     </div>
+
+    @if (isLoading) {
+      <button class="btn btn-primary w-100" type="button" disabled>
+        <span class="spinner-border spinner-border-sm"></span>
+        <span class="ms-2">Cargando...</span>
+      </button>
+    } @else {
+      <button class="btn btn-primary w-100" type="submit" [disabled]="isLoading || logInForm.invalid">
+        Iniciar sesión
+      </button>
+    }
+
+    @if (errorLogin) {
+      <p class="text-danger text-center mt-3">Datos de sesión incorrectos, intente nuevamente.</p>
+    }
+
+    <p class="text-center mt-3">
+      No tenés cuenta?
+      <a routerLink="/register" class="text-primary text-decoration-none fw-semibold">
+        Registrate
+      </a>
+    </p>
+
+  </form>
 
 </div>
