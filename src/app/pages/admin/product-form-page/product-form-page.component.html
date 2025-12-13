@@ -1,1 +1,49 @@
-<p>product-form-page works!</p>
+<header>
+  @if (isEdit) {
+    <h1>Editar producto</h1>
+  } @else {
+    <h1>Crear producto</h1>
+  }
+</header>
+
+<main>
+  <form (ngSubmit)="save()">
+    <div>
+      <label for="name">Nombre</label>
+      <input id="name" name="name" [(ngModel)]="form.name" required />
+    </div>
+
+    <div>
+      <label for="description">Descripción</label>
+      <textarea id="description" name="description" [(ngModel)]="form.description"></textarea>
+    </div>
+
+    <div>
+      <label for="price">Precio</label>
+      <input id="price" name="price" type="number" [(ngModel)]="form.price" required />
+    </div>
+
+    <div>
+      <label for="categoryId">Categoría</label>
+      <input id="categoryId" name="categoryId" type="number" [(ngModel)]="form.categoryId" />
+      <!-- Si ya tenés categorías, acá reemplazás por un select con @for -->
+    </div>
+
+    <div>
+      <label for="imageUrl">Imagen (URL)</label>
+      <input id="imageUrl" name="imageUrl" [(ngModel)]="form.imageUrl" />
+    </div>
+
+    <div>
+      <label>
+        <input type="checkbox" name="isFeatured" [(ngModel)]="form.isFeatured" />
+        Destacado
+      </label>
+    </div>
+
+    <div>
+      <button type="submit">Guardar</button>
+      <button type="button" (click)="cancel()">Cancelar</button>
+    </div>
+  </form>
+</main>
