@@ -27,7 +27,9 @@ export class ProductService {
   }
 
   /** Borra un producto */
-  async deleteProduct(userId: string | number, productId: string) {
+  async deleteProduct(productId: string) {
+    
+
     const result = await Swal.fire({
       title: "¿Estás seguro?",
       text: "¡No vas a poder revertir esta acción!",
@@ -38,13 +40,14 @@ export class ProductService {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar"
     });
-
+    
     if (result.isConfirmed) {
+        const token = this.authService.token;
       const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
         method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + this.authService.token,
-        },
+        headers:{
+          Authorization: "Bearer "+token,
+        }
       });
 
       if (!res.ok) {
@@ -88,7 +91,7 @@ async getProductById(userId: string | number, productId: string | number) {
 
 /** Crea un producto */
 async createProduct(userId: string | number, newProduct: any) {
-  const res = await fetch(`${this.URL_BASE}/${userId}/products`, {
+  const res = await fetch(`${this.URL_BASE}/products/${userId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

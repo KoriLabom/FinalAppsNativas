@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { ProductService } from '../../../services/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products-admin-page',
@@ -13,19 +14,22 @@ export class ProductsAdminPageComponent implements OnInit {
   ngOnInit(): void {
     this.reload();
   }
-async deleteProduct(id: string, productid: string) {
-  await this.productsService.deleteProduct(id,productid);
+  router=inject(Router);
+async deleteProduct(productid: string) {
+  console.log("TOKEN:", this.authService.token);
+
+  await this.productsService.deleteProduct(productid);
 }
 
 editProduct(id: string | number) {
   // Ajustá esta ruta a la que uses para editar
   // Ej: /admin/products/edit/123
-  this.authService.router.navigate(['/admin/products/edit', id]);
+  this.router.navigate(['/admin/products/edit', id]);
 }
 
 createProduct() {
   // Ajustá esta ruta
-  this.authService.router.navigate(['/admin/products/create']);
+  this.router.navigate(['/admin/products/new']);
 }
 
 async reload() {
