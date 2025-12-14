@@ -1,1 +1,74 @@
-<p>products-admin-page works!</p>
+<header>
+  <h1>Administrar productos</h1>
+
+  <div>
+    <button type="button" (click)="createProduct()">+ Nuevo producto</button>
+    <button type="button" (click)="reload()">Recargar</button>
+    <button type="button" (click)="authService.logout()">Cerrar sesión</button>
+  </div>
+</header>
+
+<main>
+
+  @if (productsService.products.length === 0) {
+    <section>
+      <p>No hay productos cargados.</p>
+    </section>
+  }
+
+  @if (productsService.products.length > 0) {
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Destacado</th>
+            <th>Descuento</th>
+            <th>Happy hour</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (p of productsService.products; track p.id) {
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ p.price }}</td>
+
+              <td>
+                @if (p.isFeatured) {
+                  <span>⭐ Sí</span>
+                } @else {
+                  <span>—</span>
+                }
+              </td>
+
+              <td>
+                @if (p.discountPercentage && p.discountPercentage > 0) {
+                  <span>{{ p.discountPercentage }}%</span>
+                } @else {
+                  <span>—</span>
+                }
+              </td>
+
+              <td>
+                @if (p.happyHourEnabled) {
+                  <span>✅ Activo</span>
+                } @else {
+                  <span>—</span>
+                }
+              </td>
+
+              <td>
+                <button type="button" (click)="editProduct(p.id)">Editar</button>
+                <button type="button" (click)="deleteProduct(p.id)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+
+</main>
