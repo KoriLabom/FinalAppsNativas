@@ -1,0 +1,90 @@
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.restaurants-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.restaurant-card {
+    width: calc(33.333% - 20px); 
+    min-width: 280px; 
+    
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 15px;
+}
+
+.card-header h3 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: #007bff;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.detail strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.card-footer {
+    padding-top: 10px;
+    text-align: right;
+}
+
+.view-details {
+    color: #28a745;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.loading-state, .empty-state {
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-top: 40px;
+}
+
+.empty-state h3 {
+    color: #dc3545;
+}

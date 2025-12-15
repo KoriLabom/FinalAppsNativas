@@ -1,2 +1,45 @@
-restaurantpage work
+<div class="page-container">
+    
+    <h2>Menú de Restaurantes de la Comunidad</h2>
 
+    <div [hidden]="!isLoading" class="loading-state">
+        <p>Cargando la lista de restaurantes, por favor espera...</p>
+    </div>
+
+    <div [hidden]="isLoading || restaurants.length === 0" class="restaurants-grid">
+        
+        <div *ngFor="let r of restaurants; let i = index" class="restaurant-card">
+            
+            <a [routerLink]="['/restaurantes', i]" class="card-link">
+                
+                <div class="card-header">
+                    <h3>{{ r.restaurantName }}</h3>
+                </div>
+                
+                <div class="card-body">
+                    <p class="detail">
+                        <strong>📍 Dirección:</strong> {{ r.address }}
+                    </p>
+                    
+                    <p class="detail">
+                        <strong>📞 Teléfono:</strong> {{ r.phoneNumber }}
+                    </p>
+
+                    <p class="creator">
+                        Creado por: {{ r.firstName }} {{ r.lastName }}
+                    </p>
+                </div>
+
+                <div class="card-footer">
+                    <span class="view-details">Ver Detalles y Menú</span>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <div [hidden]="isLoading || restaurants.length > 0" class="empty-state">
+        <h3>¡Ups!</h3>
+        <p>No se encontraron restaurantes disponibles en la API.</p>
+    </div>
+</div>

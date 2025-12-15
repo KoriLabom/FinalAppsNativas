@@ -1,0 +1,32 @@
+<div class="detail-container">
+    
+    <div [hidden]="!isLoading" class="loading-state">
+        <p>Cargando detalles...</p>
+    </div>
+
+    <div [hidden]="!restaurant || isLoading" class="restaurant-info">
+        
+        <h1>Detalles de {{ restaurant?.restaurantName }}</h1>
+        
+        <div class="details-grid">
+            <h3>Información de Contacto y Ubicación</h3>
+            <p><strong>📍 Dirección:</strong> {{ restaurant?.address }}</p>
+            <p><strong>📞 Teléfono:</strong> {{ restaurant?.phoneNumber }}</p>
+
+            <h3 class="creator-header">Creado por</h3>
+            <p><strong>👤 Nombre:</strong> {{ restaurant?.firstName }} {{ restaurant?.lastName }}</p>
+            </div>
+
+        <button [routerLink]="['/restaurantes']" class="back-button">
+            ← Volver al Listado
+        </button>
+    </div>
+
+    <div [hidden]="restaurant !== undefined || isLoading" class="not-found">
+        <h1>Restaurante No Encontrado</h1>
+        <p>El identificador no corresponde a ningún restaurante en la lista.</p>
+        <button [routerLink]="['/restaurantes']" class="back-button">
+            Volver al Listado
+        </button>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { RestaurantDetailComponent } from './pages/restaurant-detail/restaurant-detail.component';
 
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/register-page/register-page.component';
@@ -21,6 +22,10 @@ import { CategoryFormPageComponent } from './pages/admin/category-form-page/cate
 // import { onlyGuestGuard } from './guards/only-guest.guard';
 
 export const routes: Routes = [
+    { 
+        path: 'restaurantes/:id',
+         component: RestaurantDetailComponent 
+    },
 
     // Auth
     {
