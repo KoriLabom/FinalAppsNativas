@@ -79,7 +79,7 @@ export const routes: Routes = [
                 // canActivate: [authGuard, ownerGuard]
             },
             {
-                path: "admin/products/:id/edit",
+                path: "admin/products/edit/:id",
                 component: ProductFormPageComponent,
                 // canActivate: [authGuard, ownerGuard]
             },

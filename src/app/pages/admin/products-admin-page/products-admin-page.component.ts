@@ -33,7 +33,8 @@ createProduct() {
 }
 
 async reload() {
-  const userId = localStorage.getItem("userId");
+  const userId = this.authService.userId;
+  console.log("USERID:", userId);
   if (!userId) return; // o authService.logout()
 
   await this.productsService.getProductsByUser(userId);

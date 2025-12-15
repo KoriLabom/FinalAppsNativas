@@ -25,18 +25,19 @@ export class ProductFormPageComponent implements OnInit {
     description: '',
     price: 0,
     categoryId: null,
-    imageUrl: '',
     isFeatured: false,
   };
 
   async ngOnInit() {
     this.productId = this.route.snapshot.paramMap.get('id');
+    
     this.isEdit = !!this.productId;
+    
 
-    if (!this.userId) return;
 
     if (this.isEdit) {
-      const product = await this.productsService.getProductById(this.userId, this.productId!);
+      console.log(this.productId);
+      const product = await this.productsService.getProductById(this.productId!);
       if (!product) return;
 
       // Cargamos el form
@@ -54,9 +55,9 @@ export class ProductFormPageComponent implements OnInit {
     if (!this.form.name || this.form.price == null) return;
 
     if (this.isEdit) {
-      await this.productsService.editProduct(this.userId, this.form);
+      await this.productsService.editProduct(this.form);
     } else {
-      await this.productsService.createProduct(this.userId, this.form);
+      await this.productsService.createProduct(this.form);
     }
 
     this.router.navigate(['/admin/products']);

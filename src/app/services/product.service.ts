@@ -11,7 +11,7 @@ export class ProductService {
   readonly URL_BASE = "https://w370351.ferozo.com/api";
 
   products: any[] = [];
-
+  
   /** Obtiene los productos del usuario (dueño) => del restaurante */
   async getProductsByUser(userId: string | number) {
     const res = await fetch(`${this.URL_BASE}/users/${userId}/products`, {
@@ -78,20 +78,21 @@ export class ProductService {
     }
   }
   /** Obtiene un producto del usuario por ID (para editar) */
-async getProductById(userId: string | number, productId: string | number) {
+async getProductById(productId: string | number) {
   const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
     headers: {
       Authorization: "Bearer " + this.authService.token,
     }
   });
   if (!res.ok) return;
+  console.log("RES:", res);
   const product = await res.json();
   return product;
 }
 
 /** Crea un producto */
-async createProduct(userId: string | number, newProduct: any) {
-  const res = await fetch(`${this.URL_BASE}/products/${userId}`, {
+async createProduct(newProduct: any) {
+  const res = await fetch(`${this.URL_BASE}/products`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -107,7 +108,7 @@ async createProduct(userId: string | number, newProduct: any) {
 }
 
 /** Edita un producto */
-async editProduct(userId: string | number, productEdited: any) {
+async editProduct(productEdited: any) {
   const res = await fetch(`${this.URL_BASE}/products/${productEdited.id}`, {
     method: "PUT",
     headers: {
