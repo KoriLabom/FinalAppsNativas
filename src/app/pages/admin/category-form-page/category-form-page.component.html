@@ -1,1 +1,36 @@
-<p>category-form-page works!</p>
+<div class="page-container">
+  <header class="page-header">
+    @if (isEdit) {
+      <h2>Editar categoría</h2>
+      <p class="subtitle">Actualizá el nombre de la categoría.</p>
+    } @else {
+      <h2>Crear categoría</h2>
+      <p class="subtitle">Completá el campo para crear una nueva categoría.</p>
+    }
+  </header>
+
+  <main class="card">
+    <form (ngSubmit)="save()" class="form">
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="field field-full">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            [(ngModel)]="form.name"
+            required
+            placeholder="Ej: Bebidas"
+          />
+          <p class="hint">Este nombre se mostrará en el selector de categorías.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Guardar</button>
+        <button type="button" class="btn ghost" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </main>
+</div>

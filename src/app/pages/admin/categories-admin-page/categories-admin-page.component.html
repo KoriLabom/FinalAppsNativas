@@ -1,1 +1,77 @@
-<p>categories-admin-page works!</p>
+<div class="page-container">
+  <header class="page-header">
+    <div class="header-left">
+      <h2>Administrar categorías</h2>
+      <p class="subtitle">Gestioná tus categorías: creá, editá o eliminá.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn primary" type="button" (click)="createCategory()">
+        + Nueva categoría
+      </button>
+
+      <button class="btn ghost" type="button" (click)="reload()">
+        Recargar
+      </button>
+
+      <button class="btn danger" type="button" (click)="authService.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <main>
+    @if (categories.length === 0) {
+      <section class="card empty-state">
+        <h3>¡Ups!</h3>
+        <p>No hay categorías cargadas.</p>
+
+        <button class="btn primary" type="button" (click)="createCategory()">
+          Crear mi primera categoría
+        </button>
+      </section>
+    }
+
+    @if (categories.length > 0) {
+      <section class="card">
+        <div class="table-head">
+          <h3>Listado</h3>
+          <span class="pill">{{ categories.length }} categorías</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th class="right">ID</th>
+                <th class="actions-col">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (c of categories; track c.id) {
+                <tr>
+                  <td class="name">
+                    <div class="name-title">{{ c.name }}</div>
+                  </td>
+
+                  <td class="right muted">{{ c.id }}</td>
+
+                  <td class="actions">
+                    <button class="icon-btn" type="button" (click)="editCategory(c.id)">
+                      Editar
+                    </button>
+                    <button class="icon-btn danger" type="button" (click)="deleteCategory(c.id)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </main>
+</div>
