@@ -84,6 +84,8 @@ export class ProductFormPageComponent implements OnInit {
 
     if (this.isEdit) {
       await this.productsService.editProduct(this.form, this.productId);
+      const updated = await this.productsService.getProductById(this.productId);
+
     } else {
       await this.productsService.createProduct(this.form);
     }

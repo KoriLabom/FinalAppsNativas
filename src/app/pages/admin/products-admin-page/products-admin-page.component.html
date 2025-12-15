@@ -1,74 +1,111 @@
-<header>
-  <h1>Administrar productos</h1>
+<div class="page-container">
+  <header class="page-header">
+    <div class="header-left">
+      <h2>Administrar productos</h2>
+      <p class="subtitle">Gestioná tu menú: creá, editá o eliminá productos.</p>
+    </div>
 
-  <div>
-    <button type="button" (click)="createProduct()">+ Nuevo producto</button>
-    <button type="button" (click)="reload()">Recargar</button>
-    <button type="button" (click)="authService.logout()">Cerrar sesión</button>
-  </div>
-</header>
+    <div class="header-actions">
+      <button class="btn primary" type="button" (click)="createProduct()">
+        + Nuevo producto
+      </button>
 
-<main>
+      <button class="btn ghost" type="button" (click)="reload()">
+        Recargar
+      </button>
 
-  @if (productsService.products.length === 0) {
-    <section>
-      <p>No hay productos cargados.</p>
-    </section>
-  }
+      <button class="btn danger" type="button" (click)="authService.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
 
-  @if (productsService.products.length > 0) {
-    <section>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Destacado</th>
-            <th>Descuento</th>
-            <th>Happy hour</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+  <main>
+    @if (productsService.products.length === 0) {
+      <section class="card empty-state">
+        <h3>¡Ups!</h3>
+        <p>No hay productos cargados.</p>
 
-        <tbody>
-          @for (p of productsService.products; track p.id) {
-            <tr>
-              <td>{{ p.name }}</td>
-              <td>{{ p.price }}</td>
+        <button class="btn primary" type="button" (click)="createProduct()">
+          Crear mi primer producto
+        </button>
+      </section>
+    }
 
-              <td>
-                @if (p.isFeatured) {
-                  <span>⭐ Sí</span>
-                } @else {
-                  <span>—</span>
-                }
-              </td>
+    @if (productsService.products.length > 0) {
+      <section class="card">
+        <div class="table-head">
+          <h3>Listado</h3>
+          <span class="pill">
+            {{ productsService.products.length }} productos
+          </span>
+        </div>
 
-              <td>
-                @if (p.discountPercentage && p.discountPercentage > 0) {
-                  <span>{{ p.discountPercentage }}%</span>
-                } @else {
-                  <span>—</span>
-                }
-              </td>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th class="right">Precio</th>
+                <th>Destacado</th>
+                <th>Descuento</th>
+                <th>Happy hour</th>
+                <th class="actions-col">Acciones</th>
+              </tr>
+            </thead>
 
-              <td>
-                @if (p.happyHourEnabled) {
-                  <span>✅ Activo</span>
-                } @else {
-                  <span>—</span>
-                }
-              </td>
+            <tbody>
+              @for (p of productsService.products; track p.id) {
+                <tr>
+                  <td class="name">
+                    <div class="name-title">{{ p.name }}</div>
+                    @if (p.categoryName) {
+                      <div class="name-sub">Categoría: {{ p.categoryName }}</div>
+                    }
+                  </td>
 
-              <td>
-                <button type="button" (click)="editProduct(p.id)">Editar</button>
-                <button type="button" (click)="deleteProduct(p.id)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </section>
-  }
+                  <td class="right price">
+                    ${{ p.price }}
+                  </td>
 
-</main>
+                  <td>
+                    @if (p.isFeatured) {
+                      <span class="badge badge-star">⭐ Sí</span>
+                    } @else {
+                      <span class="muted">—</span>
+                    }
+                  </td>
+
+                  <td>
+                    @if (p.discountPercentage && p.discountPercentage > 0) {
+                      <span class="badge badge-discount">{{ p.discountPercentage }}%</span>
+                    } @else {
+                      <span class="muted">—</span>
+                    }
+                  </td>
+
+                  <td>
+                    @if (p.happyHourEnabled) {
+                      <span class="badge badge-ok">✅ Activo</span>
+                    } @else {
+                      <span class="muted">—</span>
+                    }
+                  </td>
+
+                  <td class="actions">
+                    <button class="icon-btn" type="button" (click)="editProduct(p.id)">
+                      Editar
+                    </button>
+                    <button class="icon-btn danger" type="button" (click)="deleteProduct(p.id)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </main>
+</div>

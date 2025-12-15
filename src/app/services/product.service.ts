@@ -78,7 +78,7 @@ export class ProductService {
     }
   }
   /** Obtiene un producto del usuario por ID (para editar) */
-async getProductById(productId: string | number) {
+async getProductById(productId: string | undefined) {
   const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
     headers: {
       Authorization: "Bearer " + this.authService.token,
@@ -108,6 +108,7 @@ async createProduct(newProduct: any) {
 
 /** Edita un producto */
 async editProduct(productEdited: any, productId?: string) {
+  console.log("EDITANDO PRODUCTO:", JSON.stringify(productEdited), "ID:", productId);
   const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
     method: "PUT",
     headers: {

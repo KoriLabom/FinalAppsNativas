@@ -1,64 +1,140 @@
-<header>
-  @if (isEdit) {
-    <h1>Editar producto</h1>
-  } @else {
-    <h1>Crear producto</h1>
-  }
-</header>
-
-<main>
-  <form (ngSubmit)="save()">
-    <div>
-      <label for="name">Nombre</label>
-      <input id="name" name="name" [(ngModel)]="form.name" required />
-    </div>
-
-    <div>
-      <label for="description">Descripción</label>
-      <textarea id="description" name="description" [(ngModel)]="form.description"></textarea>
-    </div>
-
-    <div>
-      <label for="price">Precio</label>
-      <input id="price" name="price" type="number" [(ngModel)]="form.price" required />
-    </div>
-    <div>
-      <label for="discountPercentage">Porcentaje de descuento</label>
-      <input id="discountPercentage" name="discountPercentage" type="number" [(ngModel)]="form.discount" />
-    </div>
-
-    <div>
-  <label for="categoryId">Categoría</label>
-
-  <select
-    id="categoryId"
-    name="categoryId"
-    [(ngModel)]="form.categoryId"
-    required
-  >
-    <option [ngValue]="null" disabled>
-      Seleccioná una categoría
-    </option>
-
-    @for (c of categories; track c.id) {
-      <option [ngValue]="c.id">
-        {{ c.name }}
-      </option>
+<div class="page-container">
+  <header class="page-header">
+    @if (isEdit) {
+      <h2>Editar producto</h2>
+      <p class="subtitle">Actualizá los datos del producto.</p>
+    } @else {
+      <h2>Crear producto</h2>
+      <p class="subtitle">Completá los campos para publicar un nuevo producto.</p>
     }
-  </select>
+  </header>
+
+  <main class="card">
+    <form (ngSubmit)="save()" class="form">
+
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="field">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            [(ngModel)]="form.name"
+            required
+            placeholder="Ej: Tarta de tomate"
+          />
+        </div>
+
+        <!-- Precio -->
+        <div class="field">
+          <label for="price">Precio</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            [(ngModel)]="form.price"
+            required
+            min="0"
+            placeholder="Ej: 5120"
+          />
+        </div>
+
+        <!-- Descripción -->
+        <div class="field field-full">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="form.description"
+            rows="4"
+            placeholder="Descripción del producto..."
+          ></textarea>
+        </div>
+
+        <!-- Categoría (SOLO al crear) -->
+        @if (!isEdit) {
+          <div class="field field-full">
+            <label for="categoryId">Categoría</label>
+
+            @if (categories.length === 0) {
+              <p class="hint">No hay categorías cargadas para este usuario.</p>
+            } @else {
+              <select
+                id="categoryId"
+                name="categoryId"
+                [(ngModel)]="form.categoryId"
+                required
+              >
+                <option [ngValue]="null" disabled>Seleccioná una categoría</option>
+
+                @for (c of categories; track c.id) {
+                  <option [ngValue]="c.id">{{ c.name }}</option>
+                }
+              </select>
+              <p class="hint">Se enviará el <strong>ID</strong> de la categoría al backend.</p>
+            }
+          </div>
+        }
+
+        <!-- Descuento -->
+        <div class="field">
+          <label for="discountPercentage">Descuento (%)</label>
+          <input
+            id="discountPercentage"
+            name="discountPercentage"
+            type="number"
+            [(ngModel)]="form.discount"
+            min="0"
+            max="100"
+            placeholder="Ej: 10"
+          />
+        </div>
+
+        <!-- Recomendado para -->
+        <div class="field">
+          <label for="recommendedFor">Recomendado para</label>
+          <input
+            id="recommendedFor"
+            name="recommendedFor"
+            type="number"
+            [(ngModel)]="form.recommendedFor"
+            min="0"
+            placeholder="Ej: 1"
+          />
+        </div>
+
+        <!-- Happy hour -->
+        <div class="field checkbox">
+          <label class="checkbox-label">
+            <input
+              id="happyHourEnabled"
+              name="happyHourEnabled"
+              type="checkbox"
+              [(ngModel)]="form.hasHappyHour"
+            />
+            Happy Hour
+          </label>
+        </div>
+
+        <!-- Destacado -->
+        <div class="field checkbox">
+          <label class="checkbox-label">
+            <input
+              id="featured"
+              name="featured"
+              type="checkbox"
+              [(ngModel)]="form.featured"
+            />
+            Destacado
+          </label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Guardar</button>
+        <button type="button" class="btn ghost" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </main>
 </div>
-
-
-    <div>
-      <label>
-        <input type="checkbox" name="isFeatured" [(ngModel)]="form.isFeatured" />
-        Destacado
-      </label>
-    </div>
-
-    <div>
-      <button type="submit">Guardar</button>
-      <button type="button" (click)="cancel()">Cancelar</button>
-    </div>
-  </form>
-</main>
