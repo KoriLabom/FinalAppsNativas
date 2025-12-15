@@ -22,12 +22,32 @@
       <label for="price">Precio</label>
       <input id="price" name="price" type="number" [(ngModel)]="form.price" required />
     </div>
+    <div>
+      <label for="discountPercentage">Porcentaje de descuento</label>
+      <input id="discountPercentage" name="discountPercentage" type="number" [(ngModel)]="form.discount" />
+    </div>
 
     <div>
-      <label for="categoryId">Categoría</label>
-      <input id="categoryId" name="categoryId" type="number" [(ngModel)]="form.categoryId" />
-      <!-- Si ya tenés categorías, acá reemplazás por un select con @for -->
-    </div>
+  <label for="categoryId">Categoría</label>
+
+  <select
+    id="categoryId"
+    name="categoryId"
+    [(ngModel)]="form.categoryId"
+    required
+  >
+    <option [ngValue]="null" disabled>
+      Seleccioná una categoría
+    </option>
+
+    @for (c of categories; track c.id) {
+      <option [ngValue]="c.id">
+        {{ c.name }}
+      </option>
+    }
+  </select>
+</div>
+
 
     <div>
       <label>

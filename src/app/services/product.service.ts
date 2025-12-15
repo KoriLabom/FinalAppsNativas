@@ -85,7 +85,6 @@ async getProductById(productId: string | number) {
     }
   });
   if (!res.ok) return;
-  console.log("RES:", res);
   const product = await res.json();
   return product;
 }
@@ -108,8 +107,8 @@ async createProduct(newProduct: any) {
 }
 
 /** Edita un producto */
-async editProduct(productEdited: any) {
-  const res = await fetch(`${this.URL_BASE}/products/${productEdited.id}`, {
+async editProduct(productEdited: any, productId?: string) {
+  const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

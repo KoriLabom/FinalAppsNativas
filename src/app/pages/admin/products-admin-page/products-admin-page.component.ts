@@ -10,7 +10,9 @@ import { Router } from '@angular/router';
   templateUrl: './products-admin-page.component.html',
   styleUrl: './products-admin-page.component.scss',
 })
+
 export class ProductsAdminPageComponent implements OnInit {
+  
   ngOnInit(): void {
     this.reload();
   }
@@ -34,7 +36,6 @@ createProduct() {
 
 async reload() {
   const userId = this.authService.userId;
-  console.log("USERID:", userId);
   if (!userId) return; // o authService.logout()
 
   await this.productsService.getProductsByUser(userId);
