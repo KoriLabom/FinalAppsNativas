@@ -1,54 +1,116 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-import { ActivatedRoute, RouterLink } from '@angular/router'; // ActivatedRoute para leer la URL
-import { RestaurantService, Restaurant } from '../../services/restaurant.service'; // Reutilizamos el servicio
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
+
+type GroupedCategory = { name: string; items: MenuProduct[] };
 
 @Component({
-  selector: 'app-restaurant-detail',
-  imports: [CommonModule, RouterLink], // RouterLink para el botón de regreso
+  selector: 'app-restaurant-detail-page',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './restaurant-detail.component.html',
   styleUrl: './restaurant-detail.component.scss',
-  standalone: true 
 })
-export class RestaurantDetailComponent implements OnInit { 
-  
-  // El objeto que contendrá el detalle del restaurante
-  restaurant: Restaurant | undefined; 
-  restaurantIndex: number = -1; 
-  isLoading: boolean = true; 
+export class RestaurantDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private restaurantService = inject(RestaurantService);
 
-  constructor(
-    private route: ActivatedRoute, // Inyectamos ActivatedRoute
-    private restaurantService: RestaurantService
-  ) { }
+  isLoading = true;
+  errorMsg: string | null = null;
+
+  restaurant: Restaurant | null = null;
+
+  // ✅ menú
+  menuLoading = false;
+  menuError: string | null = null;
+  products: MenuProduct[] = [];
+  grouped: GroupedCategory[] = [];
 
   ngOnInit(): void {
-    // Suscribirse a los parámetros de la URL para obtener el ID/índice
-    this.route.paramMap.subscribe(params => {
-      // Intentamos convertir el parámetro 'id' (que viene como string) a número
-      this.restaurantIndex = Number(params.get('id')); 
-      this.loadRestaurantDetail();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.errorMsg = 'Falta el id del restaurante en la URL.';
+      this.isLoading = false;
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMsg = null;
+
+    this.restaurantService.getRestaurantById(id).subscribe({
+      next: (r) => {
+        this.restaurant = r;
+        this.isLoading = false;
+
+        // ✅ cargar menú debajo
+        this.loadMenu(id);
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsg = 'No se pudo cargar el restaurante.';
+        this.isLoading = false;
+      },
     });
   }
 
-  loadRestaurantDetail() {
-    this.restaurantService.getRestaurants().subscribe({
-        next: (restaurants) => {
-            this.isLoading = false;
-            
-            // Buscamos el restaurante por el índice.
-            if (this.restaurantIndex >= 0 && this.restaurantIndex < restaurants.length) {
-                this.restaurant = restaurants[this.restaurantIndex];
-            } else {
-                // Si el índice no existe
-                this.restaurant = undefined; 
-            }
-        },
-        error: (err) => {
-            console.error('Error al cargar la lista para detalle:', err);
-            this.isLoading = false;
-            this.restaurant = undefined;
-        }
+  private loadMenu(id: string) {
+    this.menuLoading = true;
+    this.menuError = null;
+
+    this.restaurantService.getMenuByRestaurantId(id).subscribe({
+      next: (items) => {
+        this.products = items ?? [];
+        this.grouped = this.groupByCategory(this.products);
+        this.menuLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.menuError = 'No se pudo cargar el menú.';
+        this.menuLoading = false;
+      },
     });
   }
+
+  private groupByCategory(items: MenuProduct[]): GroupedCategory[] {
+    const map = new Map<string, MenuProduct[]>();
+
+    for (const p of items) {
+      const cat =
+        p.categoryName && p.categoryName.trim()
+          ? p.categoryName.trim()
+          : 'Sin categoría';
+
+      const arr = map.get(cat) ?? [];
+      arr.push(p);
+      map.set(cat, arr);
+    }
+
+    return Array.from(map.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([name, list]) => ({
+        name,
+        items: list.slice().sort((x, y) => String(x.name ?? '').localeCompare(String(y.name ?? ''))),
+      }));
+  }
+
+  // helpers compat
+  isFeatured(p: MenuProduct): boolean {
+    return !!(p.isFeatured ?? p.featured);
+  }
+  discount(p: MenuProduct): number {
+    return Number(p.discountPercentage ?? p.discount ?? 0);
+  }
+  hasHappyHour(p: MenuProduct): boolean {
+    return !!(p.happyHourEnabled ?? p.hasHappyHour);
+  }
+  finalPrice(p: MenuProduct): number {
+    const price = Number(p.price ?? 0);
+    const d = this.discount(p);
+    if (!d) return price;
+    return Math.round(price * (1 - d / 100));
+  }
+
+  trackCategory = (_: number, c: GroupedCategory) => c.name;
+  trackProduct = (_: number, p: MenuProduct) => p.id;
 }

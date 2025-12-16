@@ -1,17 +1,13 @@
 <div class="page-container">
 
   <header class="page-header">
-    <a class="back" routerLink="/restaurantes">← Volver</a>
+    <a class="back" routerLink="/restaurants">← Volver</a>
 
     @if (restaurant) {
       <div class="header-info">
         <h2>{{ restaurant.restaurantName }}</h2>
-        <p class="subtitle">
-          📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}
-        </p>
-        <p class="meta">
-          Creado por: {{ restaurant.firstName }} {{ restaurant.lastName }}
-        </p>
+        <p class="subtitle">📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}</p>
+        <p class="meta">Creado por: {{ restaurant.firstName }} {{ restaurant.lastName }}</p>
       </div>
     }
   </header>
@@ -37,7 +33,6 @@
       </section>
     } @else {
       <section class="menu">
-
         @for (cat of grouped; track trackCategory($index, cat)) {
           <div class="category-block">
             <div class="category-title">
@@ -77,13 +72,14 @@
 
                   @if (p.description) {
                     <p class="desc">{{ p.description }}</p>
+                  } @else {
+                    <p class="desc muted">Sin descripción.</p>
                   }
                 </article>
               }
             </div>
           </div>
         }
-
       </section>
     }
   }

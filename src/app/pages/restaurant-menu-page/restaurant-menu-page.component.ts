@@ -25,23 +25,25 @@ export class RestaurantMenuPageComponent implements OnInit {
   grouped: GroupedCategory[] = [];
 
   ngOnInit(): void {
-    const rawId = this.route.snapshot.paramMap.get('id');
-    if (!rawId) {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
       this.errorMsg = 'Falta el id del restaurante en la URL.';
       this.isLoading = false;
       return;
     }
 
+    this.loadRestaurantAndMenu(id);
+  }
+
+  private loadRestaurantAndMenu(id: string) {
     this.isLoading = true;
     this.errorMsg = null;
 
-    // 1) Restaurante por ID
-    this.restaurantService.getRestaurantById(rawId).subscribe({
+    this.restaurantService.getRestaurantById(id).subscribe({
       next: (r) => {
         this.restaurant = r;
 
-        // 2) Menú del restaurante por ID (mismo id de user)
-        this.restaurantService.getMenuByRestaurantId(rawId).subscribe({
+        this.restaurantService.getMenuByRestaurantId(id).subscribe({
           next: (items) => {
             this.products = items ?? [];
             this.grouped = this.groupByCategory(this.products);
@@ -80,10 +82,11 @@ export class RestaurantMenuPageComponent implements OnInit {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([name, list]) => ({
         name,
-        items: list.slice().sort((x, y) => (x.name ?? '').localeCompare(y.name ?? '')),
+        items: list.slice().sort((x, y) => String(x.name ?? '').localeCompare(String(y.name ?? ''))),
       }));
   }
 
+  // Helpers por compatibilidad con nombres de tu API
   isFeatured(p: MenuProduct): boolean {
     return !!(p.isFeatured ?? p.featured);
   }

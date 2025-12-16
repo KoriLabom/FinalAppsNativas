@@ -1,32 +1,133 @@
-<div class="detail-container">
-    
-    <div [hidden]="!isLoading" class="loading-state">
-        <p>Cargando detalles...</p>
-    </div>
+<div class="page-container">
 
-    <div [hidden]="!restaurant || isLoading" class="restaurant-info">
-        
-        <h1>Detalles de {{ restaurant?.restaurantName }}</h1>
-        
-        <div class="details-grid">
-            <h3>Información de Contacto y Ubicación</h3>
-            <p><strong>📍 Dirección:</strong> {{ restaurant?.address }}</p>
-            <p><strong>📞 Teléfono:</strong> {{ restaurant?.phoneNumber }}</p>
+  <header class="page-header">
+    <a class="back" routerLink="/restaurants">← Volver</a>
 
-            <h3 class="creator-header">Creado por</h3>
-            <p><strong>👤 Nombre:</strong> {{ restaurant?.firstName }} {{ restaurant?.lastName }}</p>
-            </div>
+    @if (restaurant) {
+      <div class="header-info">
+        <h2>{{ restaurant.restaurantName }}</h2>
+        <p class="subtitle">📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}</p>
+        <p class="meta">Creado por: {{ restaurant.firstName }} {{ restaurant.lastName }}</p>
+      </div>
+    }
+  </header>
 
-        <button [routerLink]="['/restaurantes']" class="back-button">
-            ← Volver al Listado
-        </button>
-    </div>
+  @if (isLoading) {
+    <section class="card loading-state">
+      <p>Cargando restaurante...</p>
+    </section>
+  }
 
-    <div [hidden]="restaurant !== undefined || isLoading" class="not-found">
-        <h1>Restaurante No Encontrado</h1>
-        <p>El identificador no corresponde a ningún restaurante en la lista.</p>
-        <button [routerLink]="['/restaurantes']" class="back-button">
-            Volver al Listado
-        </button>
-    </div>
+  @if (!isLoading && errorMsg) {
+    <section class="card empty-state">
+      <h3>¡Ups!</h3>
+      <p>{{ errorMsg }}</p>
+    </section>
+  }
+
+  @if (!isLoading && !errorMsg && restaurant) {
+    <main class="card detail-card">
+      <div class="row">
+        <div class="k">Nombre</div>
+        <div class="v">{{ restaurant.restaurantName }}</div>
+      </div>
+
+      <div class="row">
+        <div class="k">Dirección</div>
+        <div class="v">{{ restaurant.address }}</div>
+      </div>
+
+      <div class="row">
+        <div class="k">Teléfono</div>
+        <div class="v">{{ restaurant.phoneNumber }}</div>
+      </div>
+
+      <div class="row">
+        <div class="k">Dueño / Creador</div>
+        <div class="v">{{ restaurant.firstName }} {{ restaurant.lastName }}</div>
+      </div>
+
+      <div class="row">
+        <div class="k">ID</div>
+        <div class="v muted">{{ restaurant.id }}</div>
+      </div>
+    </main>
+
+    <!-- ✅ MENU EMBEBIDO -->
+    <section class="card menu-card">
+      <div class="menu-head">
+        <h3>Menú</h3>
+        <span class="pill">{{ products.length }} productos</span>
+      </div>
+
+      @if (menuLoading) {
+        <div class="loading-state">
+          <p>Cargando menú...</p>
+        </div>
+      }
+
+      @if (!menuLoading && menuError) {
+        <div class="empty-state">
+          <p>{{ menuError }}</p>
+        </div>
+      }
+
+      @if (!menuLoading && !menuError) {
+        @if (products.length === 0) {
+          <div class="empty-state">
+            <p>Este restaurante todavía no cargó productos.</p>
+          </div>
+        } @else {
+          <div class="menu">
+            @for (cat of grouped; track trackCategory($index, cat)) {
+              <div class="category-block">
+                <div class="category-title">
+                  <h4>{{ cat.name }}</h4>
+                  <span class="pill small">{{ cat.items.length }} items</span>
+                </div>
+
+                <div class="items">
+                  @for (p of cat.items; track trackProduct($index, p)) {
+                    <article class="item-card">
+                      <div class="item-head">
+                        <div class="item-name">
+                          <span class="title">{{ p.name }}</span>
+
+                          <div class="badges">
+                            @if (isFeatured(p)) {
+                              <span class="badge badge-star">⭐</span>
+                            }
+                            @if (discount(p) > 0) {
+                              <span class="badge badge-discount">{{ discount(p) }}% OFF</span>
+                            }
+                            @if (hasHappyHour(p)) {
+                              <span class="badge badge-ok">✅ Happy Hour</span>
+                            }
+                          </div>
+                        </div>
+
+                        <div class="price">
+                          @if (discount(p) > 0) {
+                            <span class="old">${{ p.price }}</span>
+                            <span class="now">${{ finalPrice(p) }}</span>
+                          } @else {
+                            <span class="now">${{ p.price }}</span>
+                          }
+                        </div>
+                      </div>
+
+                      @if (p.description) {
+                        <p class="desc">{{ p.description }}</p>
+                      }
+                    </article>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+    </section>
+  }
+
 </div>
