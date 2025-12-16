@@ -29,6 +29,7 @@ export class ProfilePageComponent implements OnInit {
   // Form (edit)
   form: Partial<Restaurant> = {
     restaurantName: '',
+    password: '',
     firstName: '',
     lastName: '',
     address: '',
@@ -61,6 +62,7 @@ export class ProfilePageComponent implements OnInit {
       // cargar form
       this.form = {
         restaurantName: r.restaurantName ?? '',
+        password: r.password ?? '',
         firstName: r.firstName ?? '',
         lastName: r.lastName ?? '',
         address: r.address ?? '',
@@ -155,6 +157,7 @@ confirmarLogout(): void {
     if (!this.restaurant) return;
     this.form = {
       restaurantName: this.restaurant.restaurantName ?? '',
+      password: this.restaurant.password ?? '',
       firstName: this.restaurant.firstName ?? '',
       lastName: this.restaurant.lastName ?? '',
       address: this.restaurant.address ?? '',

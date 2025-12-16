@@ -1,7 +1,7 @@
 .brand-hub {
-    color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-text-logo);
 }
-
 .btn-primary {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
@@ -9,3 +9,10 @@
 
 
 
+.back {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+  font-weight: 800;
+  opacity: 0.85;
+}

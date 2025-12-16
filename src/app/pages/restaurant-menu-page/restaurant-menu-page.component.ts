@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
@@ -12,7 +12,7 @@ type GroupedCategory = { id: number | string; name: string; items: MenuProduct[]
 @Component({
   selector: 'app-restaurant-menu-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [ RouterLink],
   templateUrl: './restaurant-menu-page.component.html',
   styleUrl: './restaurant-menu-page.component.scss',
 })

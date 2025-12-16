@@ -27,11 +27,13 @@
     <section class="card">
       <form (ngSubmit)="save()" class="form">
         <div class="grid">
-          <label class="field">
-            <span>Nombre del restaurante</span>
-            <input [(ngModel)]="form.restaurantName" name="restaurantName" type="text" placeholder="Ej: Pregonté" />
-          </label>
 
+            <div class="title"><h1>{{form.restaurantName}}</h1></div>
+    
+          <label class="field">
+            <span>contraseña</span>
+            <input [(ngModel)]="form.password" name="password" type="text" placeholder="••••••••" />
+          </label>
           <label class="field">
             <span>Teléfono</span>
             <input [(ngModel)]="form.phoneNumber" name="phoneNumber" type="text" placeholder="Ej: +54 341..." />
