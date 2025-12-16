@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginData } from '../interfaces/auth';
+import { HttpClient } from '@angular/common/http';
+import { RegisterData } from '../interfaces/auth';
 
 type LoginResponse = {
   token: string;
@@ -10,6 +12,18 @@ type LoginResponse = {
   providedIn: 'root'
 })
 export class AuthService {
+  constructor(private http: HttpClient) {}
+
+  async register(data: RegisterData): Promise<void> {
+    try {
+      const response = await this.http.post('/api/auth/register', data).toPromise();
+      console.log('Registro exitoso:', response);
+      return response as void;
+    } catch (error) {
+      console.error('Error de registro:', error);
+      throw error;
+    }
+  }
   private router = inject(Router);
 
   private _token: string | null = localStorage.getItem('token');
