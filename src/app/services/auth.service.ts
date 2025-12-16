@@ -71,7 +71,7 @@ export class AuthService {
   }
   async register(registerData: RegisterData) {
   const res = await fetch(
-    'https://w370351.ferozo.com/api/Authentication/register',
+    'https://w370351.ferozo.com/api/users',
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

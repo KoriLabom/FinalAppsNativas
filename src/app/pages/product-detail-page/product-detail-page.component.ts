@@ -1,97 +1,92 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ProductService } from '../../services/product.service'; // 👈 ajustá si tu path es otro
+import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-product-detail-public-page',
+  selector: 'app-product-detail-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './product-detail-page.component.html',
   styleUrl: './product-detail-page.component.scss',
 })
 export class ProductDetailPageComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private restaurantService = inject(RestaurantService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  productsService = inject(ProductService);
+  authService = inject(AuthService);
 
   isLoading = true;
   errorMsg: string | null = null;
 
-  restaurantId: string | null = null;
-  productId: string | null = null;
+  productId: string | undefined = undefined;
 
-  restaurant: Restaurant | null = null;
-  product: MenuProduct | null = null;
+  // lo guardo ya “normalizado” para el html
+  product: any = null;
 
-  ngOnInit(): void {
-    this.restaurantId = this.route.snapshot.paramMap.get('restaurantId');
-    this.productId = this.route.snapshot.paramMap.get('productId');
+  async ngOnInit() {
+    this.productId = this.route.snapshot.paramMap.get('id') ?? undefined;
 
-    if (!this.restaurantId || !this.productId) {
-      this.errorMsg = 'Faltan parámetros en la URL.';
+    if (!this.productId) {
+      this.errorMsg = 'Falta el id del producto en la URL.';
       this.isLoading = false;
       return;
     }
 
-    this.loadData(this.restaurantId, this.productId);
+    await this.loadProduct(this.productId);
   }
 
-  private loadData(restaurantId: string, productId: string) {
+  async loadProduct(id: string) {
     this.isLoading = true;
     this.errorMsg = null;
 
-    // 1) restaurante
-    this.restaurantService.getRestaurantById(restaurantId).subscribe({
-      next: (r) => {
-        this.restaurant = r;
+    try {
+      const product = await this.productsService.getProductById(id);
 
-        // 2) menú del restaurante, y de ahí saco el producto por id
-        this.restaurantService.getMenuByRestaurantId(restaurantId).subscribe({
-          next: (items) => {
-            const list = items ?? [];
-            const found = list.find(p => String(p.id) === String(productId));
+      if (!product) {
+        this.errorMsg = 'No se encontró el producto.';
+        this.product = null;
+        return;
+      }
 
-            if (!found) {
-              this.errorMsg = 'No se encontró el producto en este restaurante.';
-              this.product = null;
-            } else {
-              this.product = found;
-            }
-
-            this.isLoading = false;
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMsg = 'No se pudo cargar el menú del restaurante.';
-            this.isLoading = false;
-          },
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMsg = 'No se pudo cargar la info del restaurante.';
-        this.isLoading = false;
-      },
-    });
+      // ✅ Normalización igual que tu form (compat API)
+      this.product = {
+        ...product,
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: Number(product.price),
+        categoryId: Number(product.categoryId),
+        categoryName: product.categoryName,
+        featured: !!(product.featured ?? product.isFeatured),
+        labels: product.labels ?? [],
+        recommendedFor: Number(product.recommendedFor ?? product.recomendedFor ?? 0),
+        discount: Number(product.discount ?? product.discountPercentage ?? 0),
+        hasHappyHour: !!(product.hasHappyHour ?? product.happyHourEnabled),
+      };
+    } catch (e) {
+      console.error(e);
+      this.errorMsg = 'Error al cargar el producto.';
+      this.product = null;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  // helpers compat con tu API
-  isFeatured(p: MenuProduct): boolean {
-    return !!(p.isFeatured ?? p.featured);
-  }
-
-  discount(p: MenuProduct): number {
-    return Number(p.discountPercentage ?? p.discount ?? 0);
-  }
-
-  hasHappyHour(p: MenuProduct): boolean {
-    return !!(p.happyHourEnabled ?? p.hasHappyHour);
-  }
-
-  finalPrice(p: MenuProduct): number {
-    const price = Number(p.price ?? 0);
-    const d = this.discount(p);
+  finalPrice(): number {
+    const price = Number(this.product?.price ?? 0);
+    const d = Number(this.product?.discount ?? 0);
     if (!d) return price;
     return Math.round(price * (1 - d / 100));
+  }
+
+  back() {
+    // si querés volver al admin:
+    this.router.navigate(['/admin/products']);
+
+    // si querés volver a la vista pública (si la tenés), cambiá esto.
+    // this.router.navigate(['/restaurants']);
   }
 }

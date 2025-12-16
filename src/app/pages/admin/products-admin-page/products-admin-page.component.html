@@ -42,69 +42,116 @@
         </div>
 
         <div class="table-wrap">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th class="right">Precio</th>
-                <th>Destacado</th>
-                <th>Descuento</th>
-                <th>Happy hour</th>
-                <th class="actions-col">Acciones</th>
-              </tr>
-            </thead>
-            
-            <tbody>
-              @for (p of productsService.products; track p.id) {
-                <p>{{ p.hasHappyHour }}</p>
-                <tr>
-                  <td class="name">
-                    <div class="name-title">{{ p.name }}</div>
-                    @if (p.categoryName) {
-                      <div class="name-sub">Categoría: {{ p.categoryName }}</div>
-                    }
-                  </td>
+         <table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Categoría</th>
+      <th class="right">Precio</th>
+      <th>Destacado</th>
+      <th>Descuento</th>
+      <th>Happy hour</th>
+      <th>Etiquetas</th>
+      <th>Recomendado</th>
+      <th class="actions-col">Acciones</th>
+    </tr>
+  </thead>
 
-                  <td class="right price">
-                    ${{ p.price }}
-                  </td>
+  <tbody>
+    @for (p of productsService.products; track p.id) {
+      <tr>
+        <!-- Nombre -->
+        <td class="name">
+          <div class="name-title">{{ p.name }}</div>
+        </td>
 
-                  <td>
-                    @if (p.featured) {
-                      <span class="badge badge-star">⭐ Sí</span>
-                    } @else {
-                      <span class="muted">—</span>
-                    }
-                  </td>
+        <!-- Descripción -->
+        <td class="description">
+          @if (p.description) {
+            {{ p.description }}
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
 
-                  <td>
-                    @if (p.discount && p.discount > 0) {
-                      <span class="badge badge-discount">{{ p.discount }}%</span>
-                    } @else {
-                      <span class="muted">—</span>
-                    }
-                  </td>
+        <!-- Categoría -->
+        <td>
+          @if (p.categoryName) {
+            {{ p.categoryName }}
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
 
-                  <td>
-                    @if (p.hasHappyHour) {
-                      <span class="badge badge-ok">✅ Activo</span>
-                    } @else {
-                      <span class="muted">—</span>
-                    }
-                  </td>
+        <!-- Precio -->
+        <td class="right price">
+          ${{ p.price }}
+        </td>
 
-                  <td class="actions">
-                    <button class="icon-btn" type="button" (click)="editProduct(p.id)">
-                      Editar
-                    </button>
-                    <button class="icon-btn danger" type="button" (click)="deleteProduct(p.id)">
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
+        <!-- Destacado -->
+        <td>
+          @if (p.featured) {
+            <span class="badge badge-star">⭐ Sí</span>
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
+
+        <!-- Descuento -->
+        <td>
+          @if (p.discount && p.discount > 0) {
+            <span class="badge badge-discount">{{ p.discount }}%</span>
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
+
+        <!-- Happy hour -->
+        <td>
+          @if (p.hasHappyHour) {
+            <span class="badge badge-ok">✅ Activo</span>
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
+
+        <!-- Labels -->
+        <td>
+          @if (p.labels?.length > 0) {
+            <div class="labels">
+              @for (l of p.labels; track l) {
+                <span class="label">{{ l }}</span>
               }
-            </tbody>
-          </table>
+            </div>
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
+
+        <!-- Recomendado para -->
+        <td class="center">
+          @if (p.recommendedFor && p.recommendedFor > 0) {
+            {{ p.recommendedFor }}
+          } @else {
+            <span class="muted">—</span>
+          }
+        </td>
+
+        <!-- Acciones -->
+        <td class="actions">
+          <button class="icon-btn" type="button" (click)="editProduct(p.id)">
+            Editar
+          </button>
+          <button class="icon-btn danger" type="button" (click)="deleteProduct(p.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
         </div>
       </section>
     }

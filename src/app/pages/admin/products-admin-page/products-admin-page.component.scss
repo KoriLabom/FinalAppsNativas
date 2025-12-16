@@ -258,6 +258,29 @@
     background: #fee2e2;
   }
 }
+.description {
+  max-width: 260px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.label {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+}
+
+.center {
+  text-align: center;
+}
 
 /* RESPONSIVE */
 @media (max-width: 640px) {

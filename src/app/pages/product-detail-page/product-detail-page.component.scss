@@ -5,27 +5,22 @@
 }
 
 .page-header {
-  display: grid;
-  gap: 10px;
-}
-
-.back {
-  display: inline-flex;
-  width: fit-content;
-  text-decoration: none;
-  font-weight: 800;
-  opacity: 0.85;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .header-info h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
 }
 
-.subtitle {
-  margin: 6px 0 0 0;
-  opacity: 0.78;
+.meta {
+  margin: 8px 0 0 0;
+  opacity: 0.75;
 }
 
 .card {
@@ -40,19 +35,6 @@
 .empty-state {
   text-align: center;
   padding: 26px;
-}
-
-.product-card .top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-}
-
-.title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 900;
 }
 
 .badges {
@@ -74,9 +56,23 @@
 .badge-discount { background: rgba(34, 197, 94, 0.14); }
 .badge-ok { background: rgba(59, 130, 246, 0.14); }
 
-.meta {
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.desc {
   margin: 10px 0 0 0;
-  opacity: 0.75;
+  opacity: 0.85;
+  line-height: 1.4;
 }
 
 .price {
@@ -110,16 +106,6 @@
   opacity: 0.85;
 }
 
-.desc {
-  margin: 0;
-  line-height: 1.45;
-  opacity: 0.9;
-}
-
-.muted {
-  opacity: 0.6;
-}
-
 .details {
   display: grid;
   gap: 10px;
@@ -135,6 +121,10 @@
   background: rgba(0,0,0,0.02);
 }
 
+.row-full {
+  align-items: flex-start;
+}
+
 .k {
   font-weight: 900;
   opacity: 0.8;
@@ -143,4 +133,36 @@
 .v {
   opacity: 0.75;
   text-align: right;
+}
+
+.labels {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.label {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+.btn {
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.btn.ghost {
+  background: transparent;
 }

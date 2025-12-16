@@ -1,16 +1,31 @@
 <div class="page-container">
 
   <header class="page-header">
-    @if (restaurantId) {
-      <a class="back" [routerLink]="['/restaurants', restaurantId]">← Volver</a>
-    } @else {
-      <a class="back" routerLink="/restaurants">← Volver</a>
-    }
+    <button class="btn ghost" type="button" (click)="back()">← Volver</button>
 
-    @if (restaurant) {
+    @if (product) {
       <div class="header-info">
-        <h2>{{ restaurant.restaurantName }}</h2>
-        <p class="subtitle">📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}</p>
+        <h2>{{ product.name }}</h2>
+
+        <div class="badges">
+          @if (product.featured) {
+            <span class="badge badge-star">⭐ Destacado</span>
+          }
+          @if (product.discount && product.discount > 0) {
+            <span class="badge badge-discount">{{ product.discount }}% OFF</span>
+          }
+          @if (product.hasHappyHour) {
+            <span class="badge badge-ok">✅ Happy Hour</span>
+          }
+        </div>
+
+        <p class="meta">
+          @if (product.categoryName) {
+            Categoría: <strong>{{ product.categoryName }}</strong>
+          } @else {
+            <span class="muted">Sin categoría</span>
+          }
+        </p>
       </div>
     }
   </header>
@@ -30,31 +45,30 @@
 
   @if (!isLoading && !errorMsg && product) {
     <main class="card product-card">
+
       <div class="top">
         <div class="left">
           <h3 class="title">{{ product.name }}</h3>
 
-          <div class="badges">
-            @if (isFeatured(product)) {
-              <span class="badge badge-star">⭐ Destacado</span>
-            }
-            @if (discount(product) > 0) {
-              <span class="badge badge-discount">{{ discount(product) }}% OFF</span>
-            }
-            @if (hasHappyHour(product)) {
-              <span class="badge badge-ok">✅ Happy Hour</span>
-            }
-          </div>
+          @if (product.description) {
+            <p class="desc">{{ product.description }}</p>
+          } @else {
+            <p class="desc muted">Sin descripción.</p>
+          }
 
-          @if (product.categoryName) {
-            <p class="meta">Categoría: <strong>{{ product.categoryName }}</strong></p>
+          @if (product.labels?.length > 0) {
+            <div class="labels">
+              @for (l of product.labels; track l) {
+                <span class="label">{{ l }}</span>
+              }
+            </div>
           }
         </div>
 
         <div class="price">
-          @if (discount(product) > 0) {
+          @if (product.discount && product.discount > 0) {
             <span class="old">${{ product.price }}</span>
-            <span class="now">${{ finalPrice(product) }}</span>
+            <span class="now">${{ finalPrice() }}</span>
           } @else {
             <span class="now">${{ product.price }}</span>
           }
@@ -62,21 +76,14 @@
       </div>
 
       <section class="section">
-        <h4>Descripción</h4>
-        @if (product.description) {
-          <p class="desc">{{ product.description }}</p>
-        } @else {
-          <p class="muted">Sin descripción.</p>
-        }
-      </section>
-
-      <section class="section">
         <h4>Detalles</h4>
 
         <div class="details">
           <div class="row">
-            <span class="k">ID</span>
-            <span class="v">{{ product.id }}</span>
+            <span class="k">Categoría</span>
+            <span class="v">
+              @if (product.categoryName) { {{ product.categoryName }} } @else { — }
+            </span>
           </div>
 
           <div class="row">
@@ -87,30 +94,46 @@
           <div class="row">
             <span class="k">Descuento</span>
             <span class="v">
-              @if (discount(product) > 0) { {{ discount(product) }}% } @else { — }
+              @if (product.discount && product.discount > 0) { {{ product.discount }}% } @else { — }
             </span>
           </div>
 
           <div class="row">
             <span class="k">Precio final</span>
-            <span class="v">${{ finalPrice(product) }}</span>
+            <span class="v">${{ finalPrice() }}</span>
           </div>
 
           <div class="row">
             <span class="k">Happy Hour</span>
             <span class="v">
-              @if (hasHappyHour(product)) { Activo } @else { — }
+              @if (product.hasHappyHour) { Activo } @else { — }
             </span>
           </div>
 
           <div class="row">
             <span class="k">Destacado</span>
             <span class="v">
-              @if (isFeatured(product)) { Sí } @else { — }
+              @if (product.featured) { Sí } @else { — }
+            </span>
+          </div>
+
+          <div class="row">
+            <span class="k">Recomendado para</span>
+            <span class="v">
+              @if (product.recommendedFor && product.recommendedFor > 0) { {{ product.recommendedFor }} } @else { — }
+            </span>
+          </div>
+
+          <div class="row row-full">
+            <span class="k">Etiquetas</span>
+            <span class="v">
+              @if (product.labels?.length > 0) { {{ product.labels.join(', ') }} } @else { — }
             </span>
           </div>
         </div>
       </section>
+
+      <!-- ✅ Nota: NO mostramos id, userId, categoryId -->
     </main>
   }
 
