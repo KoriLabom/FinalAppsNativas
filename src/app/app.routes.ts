@@ -17,6 +17,7 @@ import { CategoriesAdminPageComponent } from './pages/admin/categories-admin-pag
 import { CategoryFormPageComponent } from './pages/admin/category-form-page/category-form-page.component';
 import { onlyGuestGuard } from './guards/onlyGuest.guard';
 import { onlyUserGuard } from './guards/onlyUser.guard';
+import { ProfilePageComponent } from './pages/admin/profile-page/profile-page.component';
 
 
 // import { authGuard } from './guards/auth.guard';
@@ -100,6 +101,11 @@ export const routes: Routes = [
             {
                 path: "admin/categories/edit/:id",
                 component: CategoryFormPageComponent,
+                canActivate: [onlyUserGuard]
+            },
+            {
+                path: "admin/edit/profile",
+                component: ProfilePageComponent,
                 canActivate: [onlyUserGuard]
             }
 

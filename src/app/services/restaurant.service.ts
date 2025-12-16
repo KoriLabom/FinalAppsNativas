@@ -103,4 +103,12 @@ export class RestaurantService {
 
     return edited;
   }
+  async deleteRestaurant(id: number | string) {
+    const res = await fetch(`${this.URL_BASE}/users/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...this.authService.getAuthorizationHeader(),
+      },
+    });
+  }
 }

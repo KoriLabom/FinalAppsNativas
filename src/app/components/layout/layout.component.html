@@ -38,6 +38,9 @@
 
           <!-- placeholder: cuando implementes auth, cambiarás esto -->
           @if (this.token) {
+            <li>
+              <a class="nav-link" routerLink="/admin/edit/profile">Mi Perfil</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" (click)="logOut()">Cerrar Sesión</a>
             </li>

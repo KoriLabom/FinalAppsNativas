@@ -1,1 +1,83 @@
-<p>profile-page works!</p>
+<div class="page">
+  <header class="header">
+    <div class="title">
+      <h1>Mi perfil</h1>
+      <p class="sub">Editá los datos de tu restaurante.</p>
+    </div>
+
+    <button class="btn danger" type="button" (click)="confirmarLogout()">
+      Cerrar sesión
+      </button>
+  </header>
+
+  @if (isLoading) {
+    <section class="card">
+      <p class="muted">Cargando perfil...</p>
+    </section>
+  }
+
+  @if (!isLoading && errorMsg) {
+    <section class="card">
+      <h3>¡Ups!</h3>
+      <p class="muted">{{ errorMsg }}</p>
+    </section>
+  }
+
+  @if (!isLoading && !errorMsg) {
+    <section class="card">
+      <form (ngSubmit)="save()" class="form">
+        <div class="grid">
+          <label class="field">
+            <span>Nombre del restaurante</span>
+            <input [(ngModel)]="form.restaurantName" name="restaurantName" type="text" placeholder="Ej: Pregonté" />
+          </label>
+
+          <label class="field">
+            <span>Teléfono</span>
+            <input [(ngModel)]="form.phoneNumber" name="phoneNumber" type="text" placeholder="Ej: +54 341..." />
+          </label>
+
+          <label class="field">
+            <span>Dirección</span>
+            <input [(ngModel)]="form.address" name="address" type="text" placeholder="Ej: Córdoba 123" />
+          </label>
+
+          <div class="row2">
+            <label class="field">
+              <span>Nombre del dueño</span>
+              <input [(ngModel)]="form.firstName" name="firstName" type="text" placeholder="Ej: Pepito" />
+            </label>
+
+            <label class="field">
+              <span>Apellido del dueño</span>
+              <input [(ngModel)]="form.lastName" name="lastName" type="text" placeholder="Ej: Pérez" />
+            </label>
+          </div>
+
+          <!-- Si querés permitir cambiar contraseña:
+          <label class="field">
+            <span>Nueva contraseña</span>
+            <input [(ngModel)]="form.password" name="password" type="password" placeholder="••••••••" />
+          </label>
+          -->
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit" [disabled]="isSaving">
+            @if (isSaving) { Guardando... } @else { Guardar cambios }
+          </button>
+
+          <button class="btn ghost" type="button" (click)="cancel()" [disabled]="isSaving">
+            Cancelar
+          </button>
+
+          <div class="spacer"></div>
+
+          <button class="btn danger" type="button" (click)="deleteRestaurant()" [disabled]="isSaving">
+            Eliminar restaurante
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+</div>
