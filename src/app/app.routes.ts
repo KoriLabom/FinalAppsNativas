@@ -51,7 +51,7 @@ export const routes: Routes = [
             // Público
             
             {
-                path: 'restaurantes/:id',
+                path: 'restaurantes/:slug',
                 component: RestaurantDetailComponent 
             },
             {
