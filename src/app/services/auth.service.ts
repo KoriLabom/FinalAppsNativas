@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginData } from '../interfaces/auth';
+import { LoginData,RegisterData } from '../interfaces/auth';
 
 type LoginResponse = {
   token: string;
@@ -68,6 +68,28 @@ export class AuthService {
 
     this.router.navigate(['/admin/products']);
   }
+  async register(registerData: RegisterData) {
+  const res = await fetch(
+    'https://w370351.ferozo.com/api/Authentication/register',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(registerData),
+    }
+  );
+
+  if (!res.ok) throw new Error('Registro inválido');
+
+  // Si tu API devuelve token al registrarte:
+  // const data = (await res.json()) as { token: string };
+  // this._token = data.token;
+  // localStorage.setItem('token', this._token);
+  // this.router.navigate(['/admin/products']);
+
+  // Si NO devuelve token (lo más común):
+  this.router.navigate(['/login']);
+}
+
 
   logout() {
     this._token = null;
