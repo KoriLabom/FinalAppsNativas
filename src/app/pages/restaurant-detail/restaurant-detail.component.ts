@@ -27,8 +27,7 @@ export class RestaurantDetailComponent implements OnInit {
   products: MenuProduct[] = [];
   grouped: GroupedCategory[] = [];
 
-  ngOnInit(): void {
-    // ✅ ahora leemos slug, no id
+  async ngOnInit(): Promise<void> {
     const slug = this.route.snapshot.paramMap.get('slug');
     if (!slug) {
       this.errorMsg = 'Falta el nombre (slug) del restaurante en la URL.';
@@ -39,46 +38,40 @@ export class RestaurantDetailComponent implements OnInit {
     this.isLoading = true;
     this.errorMsg = null;
 
-    // 1) Traer todos
-    this.restaurantService.getRestaurants().subscribe({
-      next: (list) => {
-        const restaurants = list ?? [];
+    try {
+      // 1) Traer todos
+      const restaurants = await this.restaurantService.getRestaurants();
+      const list = restaurants ?? [];
 
-        // 2) Buscar el match por slug
-        const found = restaurants.find((r: any) =>
-          this.slugify(r.restaurantName ?? r.name) === slug
-        );
+      // 2) Buscar por slug
+      const found = list.find(r => this.slugify(r.restaurantName) === slug);
 
-        if (!found) {
-          this.errorMsg = 'Restaurante no encontrado (slug inválido).';
-          this.isLoading = false;
-          return;
-        }
-
-        const id = String(found.id);
-
-        // 3) Cargar detalle por id (como antes)
-        this.restaurantService.getRestaurantById(id).subscribe({
-          next: (r) => {
-            this.restaurant = r;
-            this.isLoading = false;
-
-            // ✅ cargar menú debajo
-            this.loadMenu(id);
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMsg = 'No se pudo cargar el restaurante.';
-            this.isLoading = false;
-          },
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMsg = 'No se pudo cargar la lista de restaurantes.';
+      if (!found) {
+        this.errorMsg = 'Restaurante no encontrado (slug inválido).';
         this.isLoading = false;
-      },
-    });
+        return;
+      }
+
+      const id = String(found.id);
+
+      // 3) Cargar detalle
+      const r = await this.restaurantService.getRestaurantById(id);
+      if (!r) {
+        this.errorMsg = 'No se pudo cargar el restaurante.';
+        this.isLoading = false;
+        return;
+      }
+
+      this.restaurant = r;
+      this.isLoading = false;
+
+      // 4) Cargar menú
+      await this.loadMenu(id);
+    } catch (err) {
+      console.error(err);
+      this.errorMsg = 'No se pudo cargar el restaurante.';
+      this.isLoading = false;
+    }
   }
 
   private slugify(text: string): string {
@@ -90,22 +83,20 @@ export class RestaurantDetailComponent implements OnInit {
       .replace(/(^-|-$)/g, '');
   }
 
-  private loadMenu(id: string) {
+  private async loadMenu(id: string) {
     this.menuLoading = true;
     this.menuError = null;
 
-    this.restaurantService.getMenuByRestaurantId(id).subscribe({
-      next: (items) => {
-        this.products = items ?? [];
-        this.grouped = this.groupByCategory(this.products);
-        this.menuLoading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.menuError = 'No se pudo cargar el menú.';
-        this.menuLoading = false;
-      },
-    });
+    try {
+      const items = await this.restaurantService.getMenuByRestaurantId(id);
+      this.products = items ?? [];
+      this.grouped = this.groupByCategory(this.products);
+    } catch (err) {
+      console.error(err);
+      this.menuError = 'No se pudo cargar el menú.';
+    } finally {
+      this.menuLoading = false;
+    }
   }
 
   private groupByCategory(items: MenuProduct[]): GroupedCategory[] {

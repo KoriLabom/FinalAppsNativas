@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 export interface Restaurant {
   id: number;
@@ -31,23 +30,77 @@ export type MenuProduct = {
   hasHappyHour?: boolean;
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class RestaurantService {
-  private apiUrl = 'https://w370351.ferozo.com/api/users';
+  authService = inject(AuthService);
 
-  constructor(private http: HttpClient) {}
+  readonly URL_BASE = 'https://w370351.ferozo.com/api';
 
-  getRestaurants(): Observable<Restaurant[]> {
-    return this.http.get<Restaurant[]>(this.apiUrl);
+  restaurants: Restaurant[] = [];
+
+  /** Obtiene todos los restaurantes (users) */
+  async getRestaurants() {
+    const res = await fetch(`${this.URL_BASE}/users`, {
+      headers: {
+        ...this.authService.getAuthorizationHeader(),
+      },
+    });
+
+    if (!res.ok) return;
+
+    const data = (await res.json()) as Restaurant[];
+    this.restaurants = data ?? [];
+    return this.restaurants;
   }
 
-  // ✅ nuevo: restaurante por id
-  getRestaurantById(id: number | string): Observable<Restaurant> {
-    return this.http.get<Restaurant>(`${this.apiUrl}/${id}`);
+  /** Obtiene restaurante por id */
+  async getRestaurantById(id: number | string) {
+    const res = await fetch(`${this.URL_BASE}/users/${id}`, {
+      headers: {
+        ...this.authService.getAuthorizationHeader(),
+      },
+    });
+
+    if (!res.ok) return;
+
+    const restaurant = (await res.json()) as Restaurant;
+    return restaurant;
   }
 
-  // ✅ nuevo: menú del restaurante (productos del usuario)
-  getMenuByRestaurantId(id: number | string): Observable<MenuProduct[]> {
-    return this.http.get<MenuProduct[]>(`${this.apiUrl}/${id}/products`);
+  /** Menú del restaurante (productos del usuario/restaurante) */
+  async getMenuByRestaurantId(id: number | string) {
+    const res = await fetch(`${this.URL_BASE}/users/${id}/products`, {
+      headers: {
+        ...this.authService.getAuthorizationHeader(),
+      },
+    });
+
+    if (!res.ok) return;
+
+    const items = (await res.json()) as MenuProduct[];
+    return items ?? [];
+  }
+
+  /** Editar restaurante */
+  async editRestaurant(id: number | string, data: Partial<Restaurant>) {
+    const res = await fetch(`${this.URL_BASE}/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.authService.getAuthorizationHeader(),
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) return;
+
+    const edited = (await res.json()) as Restaurant;
+
+    // opcional: actualizar cache local si ya estaba cargado
+    this.restaurants = this.restaurants.map(r => (r.id === edited.id ? edited : r));
+
+    return edited;
   }
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
-import { CategoryService, Category } from '../../services/category.service';
+import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -32,7 +32,7 @@ export class RestaurantMenuPageComponent implements OnInit {
   products: MenuProduct[] = [];
   grouped: GroupedCategory[] = [];
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       this.errorMsg = 'Falta el id del restaurante en la URL.';
@@ -40,7 +40,7 @@ export class RestaurantMenuPageComponent implements OnInit {
       return;
     }
 
-    this.loadRestaurantAndMenu(id);
+    await this.loadRestaurantAndMenu(id);
   }
 
   private async loadRestaurantAndMenu(id: string) {
@@ -48,15 +48,15 @@ export class RestaurantMenuPageComponent implements OnInit {
     this.errorMsg = null;
 
     try {
-      const r = await new Promise<Restaurant>((resolve, reject) => {
-        this.restaurantService.getRestaurantById(id).subscribe({
-          next: resolve,
-          error: reject,
-        });
-      });
+      const r = await this.restaurantService.getRestaurantById(id);
+      if (!r) {
+        this.errorMsg = 'No se pudo cargar el restaurante.';
+        this.isLoading = false;
+        return;
+      }
       this.restaurant = r;
 
-      const userId = this.authService.userId; // ajustá si se llama distinto
+      const userId = this.authService.userId;
       const categories = await this.categoryService.getCategoriesByUser(userId);
 
       const grouped: GroupedCategory[] = [];
@@ -69,15 +69,15 @@ export class RestaurantMenuPageComponent implements OnInit {
         grouped.push({
           id: c.id,
           name: c.name,
-          items: safeItems.slice().sort((a, b) =>
-            String(a.name ?? '').localeCompare(String(b.name ?? ''))
-          ),
+          items: safeItems
+            .slice()
+            .sort((a, b) => String(a.name ?? '').localeCompare(String(b.name ?? ''))),
         });
 
         allProducts = allProducts.concat(safeItems);
       }
 
-      this.grouped = grouped.filter(g => g.items.length > 0); // si querés mostrar categorías vacías, sacá este filter
+      this.grouped = grouped.filter(g => g.items.length > 0);
       this.products = allProducts;
 
       this.isLoading = false;
