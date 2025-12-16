@@ -1,6 +1,11 @@
 .brand-hub {
-  display: inline-block;
-  padding: 8px 12px;
-  color: #fff;
-  letter-spacing: 0.5px;
+    color: var(--color-primary);
 }
+
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+
+
