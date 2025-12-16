@@ -14,7 +14,7 @@ export class LoginPageComponent {
   auth=inject(AuthService)
   isLoading=false
   errorLogin=false
-  async login(form:any){
+  /*async login(form:any){
     console.log(form.value)
     this.errorLogin = false;
     let logindata:LoginData={
@@ -26,5 +26,25 @@ export class LoginPageComponent {
     this.isLoading = false;
     this.errorLogin = true;
     
+  }*/
+
+    async login(form: any) {
+    console.log(form.value);
+    this.errorLogin = false; 
+    let logindata: LoginData = {
+      restaurantName: form.restaurantName,
+      password: form.password
+    };
+
+    this.isLoading = true;
+
+    try {
+      await this.auth.login(logindata);
+      this.isLoading = false;
+    } catch (error) {
+      console.error('Login fallido:', error);
+      this.isLoading = false; 
+      this.errorLogin = true; 
+    }
   }
 }
