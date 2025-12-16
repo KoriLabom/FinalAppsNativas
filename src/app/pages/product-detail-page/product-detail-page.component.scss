@@ -1,0 +1,164 @@
+.page-container {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.loading, .empty {
+  text-align: center;
+  padding: 26px;
+}
+
+.product .top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.badges {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.04);
+}
+
+.badge-star { background: rgba(255, 215, 0, 0.18); }
+.badge-discount { background: rgba(34, 197, 94, 0.14); }
+.badge-ok { background: rgba(59, 130, 246, 0.14); }
+
+.meta {
+  margin: 10px 0 0 0;
+  opacity: 0.75;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+.price {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.old {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 12px;
+}
+
+.now {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.section {
+  margin-top: 16px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 14px;
+}
+
+.section h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 900;
+  opacity: 0.85;
+}
+
+.desc {
+  margin: 0;
+  line-height: 1.45;
+  opacity: 0.9;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.02);
+}
+
+.detail-full {
+  grid-column: 1 / -1;
+}
+
+.k {
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.v {
+  opacity: 0.75;
+  text-align: right;
+}
+
+/* botones */
+.btn {
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+.btn.danger {
+  color: #b91c1c;
+  border-color: rgba(185, 28, 28, 0.35);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

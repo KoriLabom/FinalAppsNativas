@@ -1,1 +1,131 @@
-<p>product-detail-page works!</p>
+<div class="page-container">
+  <header class="page-header">
+    <button class="btn ghost" type="button" (click)="back()">← Volver</button>
+
+    <div class="header-actions">
+      <button class="btn" type="button" (click)="reload()">Recargar</button>
+      <button class="btn" type="button" (click)="edit()" [disabled]="!product">Editar</button>
+      <button class="btn danger" type="button" (click)="delete()" [disabled]="!product">
+        Eliminar
+      </button>
+    </div>
+  </header>
+
+  @if (isLoading) {
+    <section class="card loading">
+      <p>Cargando producto...</p>
+    </section>
+  }
+
+  @if (!isLoading && errorMsg) {
+    <section class="card empty">
+      <h3>¡Ups!</h3>
+      <p>{{ errorMsg }}</p>
+    </section>
+  }
+
+  @if (!isLoading && !errorMsg && product) {
+    <main class="card product">
+      <div class="top">
+        <div class="left">
+          <h2 class="title">{{ product.name }}</h2>
+
+          <div class="badges">
+            @if (isFeatured()) {
+              <span class="badge badge-star">⭐ Destacado</span>
+            }
+            @if (discount() > 0) {
+              <span class="badge badge-discount">{{ discount() }}% OFF</span>
+            }
+            @if (hasHappyHour()) {
+              <span class="badge badge-ok">✅ Happy Hour</span>
+            }
+          </div>
+
+          @if (product.categoryName) {
+            <p class="meta">Categoría: <strong>{{ product.categoryName }}</strong></p>
+          } @else {
+            <p class="meta muted">Categoría: —</p>
+          }
+        </div>
+
+        <div class="price">
+          @if (discount() > 0) {
+            <span class="old">${{ product.price }}</span>
+            <span class="now">${{ finalPrice() }}</span>
+          } @else {
+            <span class="now">${{ product.price }}</span>
+          }
+        </div>
+      </div>
+
+      <section class="section">
+        <h3>Descripción</h3>
+
+        @if (product.description) {
+          <p class="desc">{{ product.description }}</p>
+        } @else {
+          <p class="muted">Sin descripción.</p>
+        }
+      </section>
+
+      <section class="section">
+        <h3>Detalles</h3>
+
+        <div class="details-grid">
+          <div class="detail">
+            <span class="k">ID</span>
+            <span class="v">{{ product.id }}</span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Precio base</span>
+            <span class="v">${{ product.price }}</span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Descuento</span>
+            <span class="v">
+              @if (discount() > 0) { {{ discount() }}% } @else { — }
+            </span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Precio final</span>
+            <span class="v">${{ finalPrice() }}</span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Happy Hour</span>
+            <span class="v">
+              @if (hasHappyHour()) { Activo } @else { — }
+            </span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Destacado</span>
+            <span class="v">
+              @if (isFeatured()) { Sí } @else { — }
+            </span>
+          </div>
+
+          <div class="detail detail-full">
+            <span class="k">Labels</span>
+            <span class="v">
+              @if ((product.labels?.length ?? 0) > 0) {
+                {{ product.labels.join(', ') }}
+              } @else {
+                —
+              }
+            </span>
+          </div>
+
+          <div class="detail">
+            <span class="k">Recomendado para</span>
+            <span class="v">{{ product.recommendedFor ?? product.recomendedFor ?? '—' }}</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  }
+</div>

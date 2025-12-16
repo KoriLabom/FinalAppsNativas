@@ -1,1 +1,153 @@
-<p>product-page works!</p>
+<div class="page-container">
+  <header class="page-header">
+    <div class="header-left">
+      <h2>Productos</h2>
+      <p class="subtitle">Buscá y gestioná tus productos.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn primary" type="button" (click)="createProduct()">
+        + Nuevo producto
+      </button>
+
+      <button class="btn ghost" type="button" (click)="reload()">
+        Recargar
+      </button>
+
+      <button class="btn danger" type="button" (click)="authService.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <section class="card toolbar">
+    <div class="search">
+      <label for="q" class="sr-only">Buscar</label>
+      <input
+        id="q"
+        name="q"
+        type="text"
+        [(ngModel)]="q"
+        placeholder="Buscar por nombre, descripción o categoría..."
+      />
+    </div>
+
+    <div class="filters">
+      <label class="chip">
+        <input type="checkbox" [(ngModel)]="onlyFeatured" />
+        Solo destacados
+      </label>
+
+      <label class="chip">
+        <input type="checkbox" [(ngModel)]="onlyHappyHour" />
+        Solo Happy Hour
+      </label>
+    </div>
+
+    <div class="count">
+      <span class="pill">{{ filtered.length }} productos</span>
+    </div>
+  </section>
+
+  @if (isLoading) {
+    <section class="card loading-state">
+      <p>Cargando productos...</p>
+    </section>
+  } @else {
+    @if (productsService.products.length === 0) {
+      <section class="card empty-state">
+        <h3>¡Ups!</h3>
+        <p>No hay productos cargados.</p>
+
+        <button class="btn primary" type="button" (click)="createProduct()">
+          Crear mi primer producto
+        </button>
+      </section>
+    } @else {
+      @if (filtered.length === 0) {
+        <section class="card empty-state">
+          <h3>Sin resultados</h3>
+          <p>No encontramos productos con esos filtros.</p>
+          <button class="btn ghost" type="button" (click)="q=''; onlyFeatured=false; onlyHappyHour=false;">
+            Limpiar filtros
+          </button>
+        </section>
+      } @else {
+        <section class="card">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th class="right">Precio</th>
+                  <th>Destacado</th>
+                  <th>Descuento</th>
+                  <th>Happy hour</th>
+                  <th class="actions-col">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (p of filtered; track p.id) {
+                  <tr>
+                    <td class="name">
+                      <div class="name-title">{{ p.name }}</div>
+                      @if (p.categoryName) {
+                        <div class="name-sub">Categoría: {{ p.categoryName }}</div>
+                      }
+                      @if (p.description) {
+                        <div class="name-sub muted">{{ p.description }}</div>
+                      }
+                    </td>
+
+                    <td class="right price">
+                      @if (discount(p) > 0) {
+                        <span class="old">${{ p.price }}</span>
+                        <span class="now">${{ finalPrice(p) }}</span>
+                      } @else {
+                        <span class="now">${{ p.price }}</span>
+                      }
+                    </td>
+
+                    <td>
+                      @if (isFeatured(p)) {
+                        <span class="badge badge-star">⭐ Sí</span>
+                      } @else {
+                        <span class="muted">—</span>
+                      }
+                    </td>
+
+                    <td>
+                      @if (discount(p) > 0) {
+                        <span class="badge badge-discount">{{ discount(p) }}%</span>
+                      } @else {
+                        <span class="muted">—</span>
+                      }
+                    </td>
+
+                    <td>
+                      @if (hasHappyHour(p)) {
+                        <span class="badge badge-ok">✅ Activo</span>
+                      } @else {
+                        <span class="muted">—</span>
+                      }
+                    </td>
+
+                    <td class="actions">
+                      <button class="icon-btn" type="button" (click)="editProduct(p.id)">
+                        Editar
+                      </button>
+                      <button class="icon-btn danger" type="button" (click)="deleteProduct(p.id)">
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+    }
+  }
+</div>
