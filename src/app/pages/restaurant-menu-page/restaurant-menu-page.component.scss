@@ -1,0 +1,152 @@
+.page-container {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.page-header {
+  display: grid;
+  gap: 10px;
+}
+
+.back {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin: 6px 0 0 0;
+  opacity: 0.75;
+}
+
+.meta {
+  margin: 6px 0 0 0;
+  opacity: 0.65;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.loading-state, .empty-state {
+  text-align: center;
+  padding: 26px;
+}
+
+.menu {
+  display: grid;
+  gap: 18px;
+}
+
+.category-block {
+  display: grid;
+  gap: 10px;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.category-title h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.pill {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.06);
+}
+
+.items {
+  display: grid;
+  gap: 10px;
+}
+
+.item-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.item-name .title {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.badges {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.04);
+}
+
+.badge-star {
+  background: rgba(255, 215, 0, 0.18);
+}
+
+.badge-discount {
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.badge-ok {
+  background: rgba(59, 130, 246, 0.14);
+}
+
+.price {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.old {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 12px;
+}
+
+.now {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.desc {
+  margin: 10px 0 0 0;
+  opacity: 0.8;
+  line-height: 1.35;
+}

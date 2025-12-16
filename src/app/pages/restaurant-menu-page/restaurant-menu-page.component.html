@@ -1,1 +1,91 @@
-<p>restaurant-menu-page works!</p>
+<div class="page-container">
+
+  <header class="page-header">
+    <a class="back" routerLink="/restaurantes">← Volver</a>
+
+    @if (restaurant) {
+      <div class="header-info">
+        <h2>{{ restaurant.restaurantName }}</h2>
+        <p class="subtitle">
+          📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}
+        </p>
+        <p class="meta">
+          Creado por: {{ restaurant.firstName }} {{ restaurant.lastName }}
+        </p>
+      </div>
+    }
+  </header>
+
+  @if (isLoading) {
+    <section class="card loading-state">
+      <p>Cargando menú...</p>
+    </section>
+  }
+
+  @if (!isLoading && errorMsg) {
+    <section class="card empty-state">
+      <h3>¡Ups!</h3>
+      <p>{{ errorMsg }}</p>
+    </section>
+  }
+
+  @if (!isLoading && !errorMsg) {
+    @if (products.length === 0) {
+      <section class="card empty-state">
+        <h3>Sin menú</h3>
+        <p>Este restaurante todavía no cargó productos.</p>
+      </section>
+    } @else {
+      <section class="menu">
+
+        @for (cat of grouped; track trackCategory($index, cat)) {
+          <div class="category-block">
+            <div class="category-title">
+              <h3>{{ cat.name }}</h3>
+              <span class="pill">{{ cat.items.length }} items</span>
+            </div>
+
+            <div class="items">
+              @for (p of cat.items; track trackProduct($index, p)) {
+                <article class="item-card">
+                  <div class="item-head">
+                    <div class="item-name">
+                      <span class="title">{{ p.name }}</span>
+
+                      <div class="badges">
+                        @if (isFeatured(p)) {
+                          <span class="badge badge-star">⭐ Destacado</span>
+                        }
+                        @if (discount(p) > 0) {
+                          <span class="badge badge-discount">{{ discount(p) }}% OFF</span>
+                        }
+                        @if (hasHappyHour(p)) {
+                          <span class="badge badge-ok">✅ Happy Hour</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="price">
+                      @if (discount(p) > 0) {
+                        <span class="old">${{ p.price }}</span>
+                        <span class="now">${{ finalPrice(p) }}</span>
+                      } @else {
+                        <span class="now">${{ p.price }}</span>
+                      }
+                    </div>
+                  </div>
+
+                  @if (p.description) {
+                    <p class="desc">{{ p.description }}</p>
+                  }
+                </article>
+              }
+            </div>
+          </div>
+        }
+
+      </section>
+    }
+  }
+
+</div>
