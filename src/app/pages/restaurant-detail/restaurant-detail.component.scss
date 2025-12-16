@@ -1,0 +1,187 @@
+.page-container {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.page-header {
+  display: grid;
+  gap: 10px;
+}
+
+.back {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+  font-weight: 800;
+  opacity: 0.85;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.subtitle {
+  margin: 6px 0 0 0;
+  opacity: 0.78;
+}
+
+.meta {
+  margin: 6px 0 0 0;
+  opacity: 0.65;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.loading-state,
+.empty-state {
+  text-align: center;
+  padding: 26px;
+}
+
+.detail-card {
+  display: grid;
+  gap: 10px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.02);
+}
+
+.k {
+  font-weight: 900;
+  opacity: 0.85;
+}
+
+.v {
+  opacity: 0.8;
+}
+
+.muted {
+  opacity: 0.6;
+}
+
+.actions {
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.btn.primary {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
+.menu-card {
+  display: grid;
+  gap: 12px;
+}
+
+.menu-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu {
+  display: grid;
+  gap: 16px;
+}
+
+.category-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.items {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.item-card {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 900;
+}
+
+.badges {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.04);
+}
+
+.price {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.old {
+  text-decoration: line-through;
+  opacity: 0.55;
+  font-size: 12px;
+}
+
+.now {
+  font-weight: 900;
+}
+
+.desc {
+  margin: 10px 0 0 0;
+  opacity: 0.85;
+}
+
+.pill.small {
+  font-size: 11px;
+  padding: 5px 8px;
+}

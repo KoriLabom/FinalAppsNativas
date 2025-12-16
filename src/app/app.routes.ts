@@ -22,10 +22,7 @@ import { CategoryFormPageComponent } from './pages/admin/category-form-page/cate
 // import { onlyGuestGuard } from './guards/only-guest.guard';
 
 export const routes: Routes = [
-    { 
-        path: 'restaurantes/:id',
-         component: RestaurantDetailComponent 
-    },
+    
 
     // Auth
     {
@@ -55,6 +52,10 @@ export const routes: Routes = [
             {
                 path: "home",
                 component: HomePageComponent
+            },
+            {
+                path: 'restaurantes/:id',
+                component: RestaurantDetailComponent 
             },
             {
                 path: "restaurants",
