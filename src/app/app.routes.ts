@@ -6,7 +6,7 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 
 import { LayoutComponent } from './components/layout/layout.component';
 
-import { HomePageComponent } from './pages/home-page/home-page.component';
+
 import { RestaurantsPageComponent } from './pages/restaurants-page/restaurants-page.component';
 import { RestaurantMenuPageComponent } from './pages/restaurant-menu-page/restaurant-menu-page.component';
 import { ProductDetailPageComponent } from './pages/product-detail-page/product-detail-page.component';
@@ -44,15 +44,12 @@ export const routes: Routes = [
 
             {
                 path: "",
-                redirectTo: "home",
+                redirectTo: "restaurants",
                 pathMatch: "full"
             },
 
             // Público
-            {
-                path: "home",
-                component: HomePageComponent
-            },
+            
             {
                 path: 'restaurantes/:id',
                 component: RestaurantDetailComponent 
@@ -100,7 +97,7 @@ export const routes: Routes = [
                 // canActivate: [authGuard, ownerGuard]
             },
             {
-                path: "admin/categories/:id/edit",
+                path: "admin/categories/edit/:id",
                 component: CategoryFormPageComponent,
                 // canActivate: [authGuard, ownerGuard]
             }

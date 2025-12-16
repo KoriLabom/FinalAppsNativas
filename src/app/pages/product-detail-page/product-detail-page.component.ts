@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product.service'; // 👈 ajustá si tu path es otro
+import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-product-detail-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './product-detail-page.component.html',
   styleUrl: './product-detail-page.component.scss',
 })
@@ -82,11 +82,4 @@ export class ProductDetailPageComponent implements OnInit {
     return Math.round(price * (1 - d / 100));
   }
 
-  back() {
-    // si querés volver al admin:
-    this.router.navigate(['/admin/products']);
-
-    // si querés volver a la vista pública (si la tenés), cambiá esto.
-    // this.router.navigate(['/restaurants']);
-  }
 }

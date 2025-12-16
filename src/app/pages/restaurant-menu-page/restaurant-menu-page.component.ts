@@ -1,9 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
 
-type GroupedCategory = { name: string; items: MenuProduct[] };
+import { RestaurantService, Restaurant, MenuProduct } from '../../services/restaurant.service';
+import { CategoryService, Category } from '../../services/category.service';
+import { ProductService } from '../../services/product.service';
+import { AuthService } from '../../services/auth.service';
+
+type GroupedCategory = { id: number | string; name: string; items: MenuProduct[] };
 
 @Component({
   selector: 'app-restaurant-menu-page',
@@ -15,6 +19,10 @@ type GroupedCategory = { name: string; items: MenuProduct[] };
 export class RestaurantMenuPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private restaurantService = inject(RestaurantService);
+
+  private categoryService = inject(CategoryService);
+  private productsService = inject(ProductService);
+  private authService = inject(AuthService);
 
   isLoading = true;
   errorMsg: string | null = null;
@@ -35,68 +43,61 @@ export class RestaurantMenuPageComponent implements OnInit {
     this.loadRestaurantAndMenu(id);
   }
 
-  private loadRestaurantAndMenu(id: string) {
+  private async loadRestaurantAndMenu(id: string) {
     this.isLoading = true;
     this.errorMsg = null;
 
-    this.restaurantService.getRestaurantById(id).subscribe({
-      next: (r) => {
-        this.restaurant = r;
-
-        this.restaurantService.getMenuByRestaurantId(id).subscribe({
-          next: (items) => {
-            this.products = items ?? [];
-            this.grouped = this.groupByCategory(this.products);
-            this.isLoading = false;
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMsg = 'No se pudo cargar el menú del restaurante.';
-            this.isLoading = false;
-          },
+    try {
+      const r = await new Promise<Restaurant>((resolve, reject) => {
+        this.restaurantService.getRestaurantById(id).subscribe({
+          next: resolve,
+          error: reject,
         });
-      },
-      error: (err) => {
-        console.error(err);
-        this.errorMsg = 'No se pudo cargar la info del restaurante.';
-        this.isLoading = false;
-      },
-    });
-  }
+      });
+      this.restaurant = r;
 
-  private groupByCategory(items: MenuProduct[]): GroupedCategory[] {
-    const map = new Map<string, MenuProduct[]>();
+      const userId = this.authService.userId; // ajustá si se llama distinto
+      const categories = await this.categoryService.getCategoriesByUser(userId);
 
-    for (const p of items) {
-      const cat =
-        p.categoryName && p.categoryName.trim()
-          ? p.categoryName.trim()
-          : 'Sin categoría';
+      const grouped: GroupedCategory[] = [];
+      let allProducts: MenuProduct[] = [];
 
-      const arr = map.get(cat) ?? [];
-      arr.push(p);
-      map.set(cat, arr);
+      for (const c of categories) {
+        const items = await this.productsService.getProductsByCategory(c.id);
+        const safeItems = (items ?? []) as MenuProduct[];
+
+        grouped.push({
+          id: c.id,
+          name: c.name,
+          items: safeItems.slice().sort((a, b) =>
+            String(a.name ?? '').localeCompare(String(b.name ?? ''))
+          ),
+        });
+
+        allProducts = allProducts.concat(safeItems);
+      }
+
+      this.grouped = grouped.filter(g => g.items.length > 0); // si querés mostrar categorías vacías, sacá este filter
+      this.products = allProducts;
+
+      this.isLoading = false;
+    } catch (err) {
+      console.error(err);
+      this.errorMsg = 'No se pudo cargar el menú/categorías.';
+      this.isLoading = false;
     }
-
-    return Array.from(map.entries())
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([name, list]) => ({
-        name,
-        items: list.slice().sort((x, y) => String(x.name ?? '').localeCompare(String(y.name ?? ''))),
-      }));
   }
 
-  // Helpers por compatibilidad con nombres de tu API
   isFeatured(p: MenuProduct): boolean {
-    return !!(p.isFeatured ?? p.featured);
+    return !!(p.isFeatured ?? (p as any).featured);
   }
 
   discount(p: MenuProduct): number {
-    return Number(p.discountPercentage ?? p.discount ?? 0);
+    return Number(p.discountPercentage ?? (p as any).discount ?? 0);
   }
 
   hasHappyHour(p: MenuProduct): boolean {
-    return !!(p.happyHourEnabled ?? p.hasHappyHour);
+    return !!(p.happyHourEnabled ?? (p as any).hasHappyHour);
   }
 
   finalPrice(p: MenuProduct): number {
@@ -106,6 +107,6 @@ export class RestaurantMenuPageComponent implements OnInit {
     return Math.round(price * (1 - d / 100));
   }
 
-  trackCategory = (_: number, c: GroupedCategory) => c.name;
-  trackProduct = (_: number, p: MenuProduct) => p.id;
+  trackCategory = (_: number, c: GroupedCategory) => c.id;
+  trackProduct = (_: number, p: MenuProduct) => (p as any).id;
 }

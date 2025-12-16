@@ -26,6 +26,18 @@ export class ProductService {
     this.products = resJson;
   }
 
+  async getProductsByCategory(categoryId: string | number) {
+    const res = await fetch(`${this.URL_BASE}/products/me?categoryId=${categoryId}`, {
+      headers:{
+          ...this.authService.getAuthorizationHeader(),
+        }
+    });
+    if (!res.ok) return;
+
+    const resJson = await res.json();
+    this.products = resJson;
+  }
+
   /** Borra un producto */
   async deleteProduct(productId: string) {
     

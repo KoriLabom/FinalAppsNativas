@@ -1,33 +1,9 @@
 <div class="page-container">
 
   <header class="page-header">
-    <button class="btn ghost" type="button" (click)="back()">← Volver</button>
+    <a class="back" routerLink="/restaurants">← Volver</a>
 
-    @if (product) {
-      <div class="header-info">
-        <h2>{{ product.name }}</h2>
-
-        <div class="badges">
-          @if (product.featured) {
-            <span class="badge badge-star">⭐ Destacado</span>
-          }
-          @if (product.discount && product.discount > 0) {
-            <span class="badge badge-discount">{{ product.discount }}% OFF</span>
-          }
-          @if (product.hasHappyHour) {
-            <span class="badge badge-ok">✅ Happy Hour</span>
-          }
-        </div>
-
-        <p class="meta">
-          @if (product.categoryName) {
-            Categoría: <strong>{{ product.categoryName }}</strong>
-          } @else {
-            <span class="muted">Sin categoría</span>
-          }
-        </p>
-      </div>
-    }
+   
   </header>
 
   @if (isLoading) {
@@ -86,10 +62,7 @@
             </span>
           </div>
 
-          <div class="row">
-            <span class="k">Precio base</span>
-            <span class="v">${{ product.price }}</span>
-          </div>
+        
 
           <div class="row">
             <span class="k">Descuento</span>
@@ -99,7 +72,7 @@
           </div>
 
           <div class="row">
-            <span class="k">Precio final</span>
+            <span class="k">Precio</span>
             <span class="v">${{ finalPrice() }}</span>
           </div>
 
@@ -133,7 +106,7 @@
         </div>
       </section>
 
-      <!-- ✅ Nota: NO mostramos id, userId, categoryId -->
+
     </main>
   }
 

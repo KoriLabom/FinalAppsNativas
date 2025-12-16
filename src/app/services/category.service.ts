@@ -14,7 +14,7 @@ export class CategoryService {
   categories: Category[] = [];
 
   /** Lista categorías del usuario */
-  async getCategoriesByUser(userId: number | string): Promise<Category[]> {
+  async getCategoriesByUser(userId: string|null): Promise<Category[]> {
     const res = await fetch(`${this.URL_BASE}/users/${userId}/categories`, {
       headers: {
         ...this.auth.getAuthorizationHeader(),
@@ -28,17 +28,6 @@ export class CategoryService {
     return data;
   }
 
-  /** Trae una categoría por ID (para editar) */
-  async getCategoryById(categoryId: string | number): Promise<Category | undefined> {
-    const res = await fetch(`${this.URL_BASE}/categories/${categoryId}`, {
-      headers: {
-        ...this.auth.getAuthorizationHeader(),
-      },
-    });
-
-    if (!res.ok) return undefined;
-    return (await res.json()) as Category;
-  }
 
   /** Crea una categoría */
   async createCategory(newCategory: Omit<Category, 'id'>): Promise<Category | undefined> {
