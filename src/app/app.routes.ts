@@ -15,6 +15,8 @@ import { ProductsAdminPageComponent } from './pages/admin/products-admin-page/pr
 import { ProductFormPageComponent } from './pages/admin/product-form-page/product-form-page.component';
 import { CategoriesAdminPageComponent } from './pages/admin/categories-admin-page/categories-admin-page.component';
 import { CategoryFormPageComponent } from './pages/admin/category-form-page/category-form-page.component';
+import { onlyGuestGuard } from './guards/onlyGuest.guard';
+import { onlyUserGuard } from './guards/onlyUser.guard';
 
 
 // import { authGuard } from './guards/auth.guard';
@@ -28,12 +30,12 @@ export const routes: Routes = [
     {
         path: "login",
         component: LoginPageComponent,
-        // canActivate: [onlyGuestGuard]
+        canActivate: [onlyGuestGuard]
     },
     {
         path: "register",
         component: RegisterPageComponent,
-        // canActivate: [onlyGuestGuard]
+        canActivate: [onlyGuestGuard]
     },
 
     // Layout wrapper
@@ -52,19 +54,18 @@ export const routes: Routes = [
             
             {
                 path: 'restaurantes/:slug',
-                component: RestaurantDetailComponent 
+                component: RestaurantDetailComponent, 
+                canActivate: [onlyGuestGuard]
             },
             {
                 path: "restaurants",
-                component: RestaurantsPageComponent
-            },
-            {
-                path: "restaurants/:id",
-                component: RestaurantMenuPageComponent
+                component: RestaurantsPageComponent,
+                canActivate: [onlyGuestGuard]
             },
             {
                 path: "products/:id",
-                component: ProductDetailPageComponent
+                component: ProductDetailPageComponent,
+                canActivate: [onlyGuestGuard]
             },
 
             // Cuenta (usuario logueado)
@@ -74,32 +75,32 @@ export const routes: Routes = [
             {
                 path: "admin/products",
                 component: ProductsAdminPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             },
             {
                 path: "admin/products/new",
                 component: ProductFormPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             },
             {
                 path: "admin/products/edit/:id",
                 component: ProductFormPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             },
             {
                 path: "admin/categories",
                 component: CategoriesAdminPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             },
             {
                 path: "admin/categories/new",
                 component: CategoryFormPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             },
             {
                 path: "admin/categories/edit/:id",
                 component: CategoryFormPageComponent,
-                // canActivate: [authGuard, ownerGuard]
+                canActivate: [onlyUserGuard]
             }
 
         ]

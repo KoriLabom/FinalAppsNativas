@@ -16,9 +16,7 @@
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/restaurants">Restaurantes</a>
-          </li>
+          
 
          @if (this.token) {
           <li class="nav-item">
@@ -26,6 +24,11 @@
           </li>
           <li>
             <a class="nav-link" routerLink="/admin/categories">Administrar Categorías</a>
+          </li>
+         }
+         @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/restaurants">Restaurantes</a>
           </li>
          }
         </ul>
