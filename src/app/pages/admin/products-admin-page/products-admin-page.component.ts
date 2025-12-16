@@ -34,6 +34,14 @@ createProduct() {
   this.router.navigate(['/admin/products/new']);
 }
 
+confirmarLogout(): void {
+    const confirmado = confirm('¿Está seguro que quiere cerrar sesión?');
+
+    if (confirmado) {
+      this.authService.logout(); 
+    }
+  }
+
 async reload() {
   const userId = this.authService.userId;
   if (!userId) return; // o authService.logout()
