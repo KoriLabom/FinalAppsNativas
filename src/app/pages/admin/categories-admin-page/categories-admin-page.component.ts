@@ -49,4 +49,12 @@ export class CategoriesAdminPageComponent implements OnInit {
     this.categories = this.categoriesService.categories;
     }
   }
+  confirmarLogout(): void {
+    const confirmado = confirm('¿Está seguro que quiere cerrar sesión?');
+
+    if (confirmado) {
+      this.authService.logout(); 
+    }
+  }
+
 }
