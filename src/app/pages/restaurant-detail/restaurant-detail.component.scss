@@ -185,3 +185,17 @@
   font-size: 11px;
   padding: 5px 8px;
 }
+.item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.item-link:hover .item-card {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+.item-card {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}

@@ -1,58 +1,60 @@
 <div class="page-container">
-  <header class="page-header">
-    <button class="btn ghost" type="button" (click)="back()">← Volver</button>
 
-    <div class="header-actions">
-      <button class="btn" type="button" (click)="reload()">Recargar</button>
-      <button class="btn" type="button" (click)="edit()" [disabled]="!product">Editar</button>
-      <button class="btn danger" type="button" (click)="delete()" [disabled]="!product">
-        Eliminar
-      </button>
-    </div>
+  <header class="page-header">
+    @if (restaurantId) {
+      <a class="back" [routerLink]="['/restaurants', restaurantId]">← Volver</a>
+    } @else {
+      <a class="back" routerLink="/restaurants">← Volver</a>
+    }
+
+    @if (restaurant) {
+      <div class="header-info">
+        <h2>{{ restaurant.restaurantName }}</h2>
+        <p class="subtitle">📍 {{ restaurant.address }} · 📞 {{ restaurant.phoneNumber }}</p>
+      </div>
+    }
   </header>
 
   @if (isLoading) {
-    <section class="card loading">
+    <section class="card loading-state">
       <p>Cargando producto...</p>
     </section>
   }
 
   @if (!isLoading && errorMsg) {
-    <section class="card empty">
+    <section class="card empty-state">
       <h3>¡Ups!</h3>
       <p>{{ errorMsg }}</p>
     </section>
   }
 
   @if (!isLoading && !errorMsg && product) {
-    <main class="card product">
+    <main class="card product-card">
       <div class="top">
         <div class="left">
-          <h2 class="title">{{ product.name }}</h2>
+          <h3 class="title">{{ product.name }}</h3>
 
           <div class="badges">
-            @if (isFeatured()) {
+            @if (isFeatured(product)) {
               <span class="badge badge-star">⭐ Destacado</span>
             }
-            @if (discount() > 0) {
-              <span class="badge badge-discount">{{ discount() }}% OFF</span>
+            @if (discount(product) > 0) {
+              <span class="badge badge-discount">{{ discount(product) }}% OFF</span>
             }
-            @if (hasHappyHour()) {
+            @if (hasHappyHour(product)) {
               <span class="badge badge-ok">✅ Happy Hour</span>
             }
           </div>
 
           @if (product.categoryName) {
             <p class="meta">Categoría: <strong>{{ product.categoryName }}</strong></p>
-          } @else {
-            <p class="meta muted">Categoría: —</p>
           }
         </div>
 
         <div class="price">
-          @if (discount() > 0) {
+          @if (discount(product) > 0) {
             <span class="old">${{ product.price }}</span>
-            <span class="now">${{ finalPrice() }}</span>
+            <span class="now">${{ finalPrice(product) }}</span>
           } @else {
             <span class="now">${{ product.price }}</span>
           }
@@ -60,8 +62,7 @@
       </div>
 
       <section class="section">
-        <h3>Descripción</h3>
-
+        <h4>Descripción</h4>
         @if (product.description) {
           <p class="desc">{{ product.description }}</p>
         } @else {
@@ -70,62 +71,47 @@
       </section>
 
       <section class="section">
-        <h3>Detalles</h3>
+        <h4>Detalles</h4>
 
-        <div class="details-grid">
-          <div class="detail">
+        <div class="details">
+          <div class="row">
             <span class="k">ID</span>
             <span class="v">{{ product.id }}</span>
           </div>
 
-          <div class="detail">
+          <div class="row">
             <span class="k">Precio base</span>
             <span class="v">${{ product.price }}</span>
           </div>
 
-          <div class="detail">
+          <div class="row">
             <span class="k">Descuento</span>
             <span class="v">
-              @if (discount() > 0) { {{ discount() }}% } @else { — }
+              @if (discount(product) > 0) { {{ discount(product) }}% } @else { — }
             </span>
           </div>
 
-          <div class="detail">
+          <div class="row">
             <span class="k">Precio final</span>
-            <span class="v">${{ finalPrice() }}</span>
+            <span class="v">${{ finalPrice(product) }}</span>
           </div>
 
-          <div class="detail">
+          <div class="row">
             <span class="k">Happy Hour</span>
             <span class="v">
-              @if (hasHappyHour()) { Activo } @else { — }
+              @if (hasHappyHour(product)) { Activo } @else { — }
             </span>
           </div>
 
-          <div class="detail">
+          <div class="row">
             <span class="k">Destacado</span>
             <span class="v">
-              @if (isFeatured()) { Sí } @else { — }
+              @if (isFeatured(product)) { Sí } @else { — }
             </span>
-          </div>
-
-          <div class="detail detail-full">
-            <span class="k">Labels</span>
-            <span class="v">
-              @if ((product.labels?.length ?? 0) > 0) {
-                {{ product.labels.join(', ') }}
-              } @else {
-                —
-              }
-            </span>
-          </div>
-
-          <div class="detail">
-            <span class="k">Recomendado para</span>
-            <span class="v">{{ product.recommendedFor ?? product.recomendedFor ?? '—' }}</span>
           </div>
         </div>
       </section>
     </main>
   }
+
 </div>

@@ -53,9 +53,10 @@
                 <th class="actions-col">Acciones</th>
               </tr>
             </thead>
-
+            
             <tbody>
               @for (p of productsService.products; track p.id) {
+                <p>{{ p.hasHappyHour }}</p>
                 <tr>
                   <td class="name">
                     <div class="name-title">{{ p.name }}</div>
@@ -69,7 +70,7 @@
                   </td>
 
                   <td>
-                    @if (p.isFeatured) {
+                    @if (p.featured) {
                       <span class="badge badge-star">⭐ Sí</span>
                     } @else {
                       <span class="muted">—</span>
@@ -77,15 +78,15 @@
                   </td>
 
                   <td>
-                    @if (p.discountPercentage && p.discountPercentage > 0) {
-                      <span class="badge badge-discount">{{ p.discountPercentage }}%</span>
+                    @if (p.discount && p.discount > 0) {
+                      <span class="badge badge-discount">{{ p.discount }}%</span>
                     } @else {
                       <span class="muted">—</span>
                     }
                   </td>
 
                   <td>
-                    @if (p.happyHourEnabled) {
+                    @if (p.hasHappyHour) {
                       <span class="badge badge-ok">✅ Activo</span>
                     } @else {
                       <span class="muted">—</span>
