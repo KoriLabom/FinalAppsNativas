@@ -28,9 +28,10 @@ export class RestaurantDetailComponent implements OnInit {
   grouped: GroupedCategory[] = [];
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (!id) {
-      this.errorMsg = 'Falta el id del restaurante en la URL.';
+    // ✅ ahora leemos slug, no id
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (!slug) {
+      this.errorMsg = 'Falta el nombre (slug) del restaurante en la URL.';
       this.isLoading = false;
       return;
     }
@@ -38,20 +39,55 @@ export class RestaurantDetailComponent implements OnInit {
     this.isLoading = true;
     this.errorMsg = null;
 
-    this.restaurantService.getRestaurantById(id).subscribe({
-      next: (r) => {
-        this.restaurant = r;
-        this.isLoading = false;
+    // 1) Traer todos
+    this.restaurantService.getRestaurants().subscribe({
+      next: (list) => {
+        const restaurants = list ?? [];
 
-        // ✅ cargar menú debajo
-        this.loadMenu(id);
+        // 2) Buscar el match por slug
+        const found = restaurants.find((r: any) =>
+          this.slugify(r.restaurantName ?? r.name) === slug
+        );
+
+        if (!found) {
+          this.errorMsg = 'Restaurante no encontrado (slug inválido).';
+          this.isLoading = false;
+          return;
+        }
+
+        const id = String(found.id);
+
+        // 3) Cargar detalle por id (como antes)
+        this.restaurantService.getRestaurantById(id).subscribe({
+          next: (r) => {
+            this.restaurant = r;
+            this.isLoading = false;
+
+            // ✅ cargar menú debajo
+            this.loadMenu(id);
+          },
+          error: (err) => {
+            console.error(err);
+            this.errorMsg = 'No se pudo cargar el restaurante.';
+            this.isLoading = false;
+          },
+        });
       },
       error: (err) => {
         console.error(err);
-        this.errorMsg = 'No se pudo cargar el restaurante.';
+        this.errorMsg = 'No se pudo cargar la lista de restaurantes.';
         this.isLoading = false;
       },
     });
+  }
+
+  private slugify(text: string): string {
+    return String(text ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
   }
 
   private loadMenu(id: string) {
@@ -90,7 +126,9 @@ export class RestaurantDetailComponent implements OnInit {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([name, list]) => ({
         name,
-        items: list.slice().sort((x, y) => String(x.name ?? '').localeCompare(String(y.name ?? ''))),
+        items: list
+          .slice()
+          .sort((x, y) => String(x.name ?? '').localeCompare(String(y.name ?? ''))),
       }));
   }
 
