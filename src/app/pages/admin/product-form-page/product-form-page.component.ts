@@ -27,7 +27,7 @@ export class ProductFormPageComponent implements OnInit {
   categories: any[] = [];
 
   labelOptions: { value: ProductLabel; text: string }[] = [
-    { value: 'None', text: 'Sin label' },
+    
     { value: 'Vegan', text: '🌱 Vegano' },
     { value: 'Vegetarian', text: '🥗 Vegetariano' },
     { value: 'Spicy', text: '🔥 Picante' },
