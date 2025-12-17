@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category.service';
@@ -26,6 +26,7 @@ export class CategoryFormPageComponent implements OnInit {
 
   async ngOnInit() {
     this.categoryId = this.route.snapshot.paramMap.get('id') ?? undefined;
+    
     this.isEdit = !!this.categoryId;
 
     if (!this.isEdit) return;

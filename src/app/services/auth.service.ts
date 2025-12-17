@@ -80,14 +80,6 @@ export class AuthService {
   );
 
   if (!res.ok) throw new Error('Registro inválido');
-
-  // Si tu API devuelve token al registrarte:
-  // const data = (await res.json()) as { token: string };
-  // this._token = data.token;
-  // localStorage.setItem('token', this._token);
-  // this.router.navigate(['/admin/products']);
-
-  // Si NO devuelve token (lo más común):
   this.router.navigate(['/login']);
 }
 
