@@ -10,7 +10,7 @@
   </header>
 
   <main class="card">
-    <form (ngSubmit)="save()" class="form">
+    <form  (ngSubmit)="save()" class="form" #productForm="ngForm">
 
       <div class="form-grid">
         <!-- Nombre -->
@@ -151,7 +151,7 @@
       </div>
 
       <div class="actions">
-        <button type="submit" class="btn primary">Guardar</button>
+        <button type="submit" class="btn primary" [disabled]="productForm.invalid">Guardar</button>
         <button type="button" class="btn ghost" (click)="cancel()">Cancelar</button>
       </div>
     </form>
