@@ -21,7 +21,7 @@ export class RestaurantDetailComponent implements OnInit {
 
   restaurant: Restaurant | null = null;
 
-  // ✅ menú
+  // menú
   menuLoading = false;
   menuError: string | null = null;
   products: MenuProduct[] = [];

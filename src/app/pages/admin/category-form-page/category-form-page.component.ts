@@ -38,7 +38,7 @@ export class CategoryFormPageComponent implements OnInit {
       return;
     }
 
-    // ✅ Traemos todas las categorías del usuario y buscamos la que coincide
+    // Traemos todas las categorías del usuario y buscamos la que coincide
     const categories = await this.categoriesService.getCategoriesByUser(userId);
 
     const found = categories.find(c => String(c.id) === String(this.categoryId));

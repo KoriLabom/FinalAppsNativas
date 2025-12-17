@@ -20,10 +20,6 @@ import { onlyUserGuard } from './guards/onlyUser.guard';
 import { ProfilePageComponent } from './pages/admin/profile-page/profile-page.component';
 
 
-// import { authGuard } from './guards/auth.guard';
-// import { ownerGuard } from './guards/owner.guard';
-// import { onlyGuestGuard } from './guards/only-guest.guard';
-
 export const routes: Routes = [
     
 
@@ -68,8 +64,6 @@ export const routes: Routes = [
                 component: ProductDetailPageComponent,
                 canActivate: [onlyGuestGuard]
             },
-
-            // Cuenta (usuario logueado)
 
 
             // Admin (dueño)

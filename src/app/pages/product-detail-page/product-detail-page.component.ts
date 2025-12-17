@@ -51,7 +51,7 @@ export class ProductDetailPageComponent implements OnInit {
         return;
       }
 
-      // ✅ Normalización igual que tu form (compat API)
+      //Normalización igual que tu form (compat API)
       this.product = {
         ...product,
         id: product.id,
