@@ -18,7 +18,7 @@ export class ProductsAdminPageComponent implements OnInit {
   }
   router=inject(Router);
 async deleteProduct(productid: string) {
-  console.log("TOKEN:", this.authService.token);
+  
 
   await this.productsService.deleteProduct(productid);
 }

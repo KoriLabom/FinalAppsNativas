@@ -120,7 +120,7 @@ async createProduct(newProduct: any) {
 
 /** Edita un producto */
 async editProduct(productEdited: any, productId?: string) {
-  console.log("EDITANDO PRODUCTO:", JSON.stringify(productEdited), "ID:", productId);
+
   const res = await fetch(`${this.URL_BASE}/products/${productId}`, {
     method: "PUT",
     headers: {

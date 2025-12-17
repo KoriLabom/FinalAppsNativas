@@ -16,7 +16,7 @@ export class LoginPageComponent {
   errorLogin=false
 
     async login(form: any) {
-    console.log(form.value);
+    
     this.errorLogin = false; 
     let logindata: LoginData = {
       restaurantName: form.restaurantName,

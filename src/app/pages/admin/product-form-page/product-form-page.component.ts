@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../../services/category.service';
 import { AuthService } from '../../../services/auth.service';
 
+type ProductLabel = "None" | "Vegan" | "Vegetarian" | "GlutenFree" | "Spicy" | "SugarFree" | "Kids" | "Shareable";
+
 @Component({
   selector: 'app-product-form-page',
   imports: [FormsModule],
@@ -19,10 +21,22 @@ export class ProductFormPageComponent implements OnInit {
   authservice = inject(AuthService);
   userId: string | null = this.authservice.userId;
   
-
+  
   productId: string | undefined = undefined;
   isEdit = false;
   categories: any[] = [];
+
+  labelOptions: { value: ProductLabel; text: string }[] = [
+    { value: 'None', text: 'Sin label' },
+    { value: 'Vegan', text: '🌱 Vegano' },
+    { value: 'Vegetarian', text: '🥗 Vegetariano' },
+    { value: 'Spicy', text: '🔥 Picante' },
+    { value: 'GlutenFree', text: '🚫 Gluten' },
+    { value: 'SugarFree', text: '🍭 Sin azúcar' },
+    { value: 'Kids', text: '🧒 Para niños' },
+    { value: 'Shareable', text: '🍽️ Para compartir' },
+  ];
+
   // Ajustá campos según tu API
   form: any = {
     name: '',
@@ -37,7 +51,17 @@ export class ProductFormPageComponent implements OnInit {
     discount: 0,
     hasHappyHour: false
   };
-
+  onLabelToggle(label: ProductLabel) {
+    if (!this.form.labels) {
+      this.form.labels = [];
+    }
+    const index = this.form.labels.indexOf(label);
+    if (index > -1) {
+      this.form.labels.splice(index, 1);
+    } else {
+      this.form.labels.push(label);
+    }
+  }
   async ngOnInit() {
     this.productId = this.route.snapshot.paramMap.get('id') ?? undefined;
     
@@ -48,7 +72,7 @@ export class ProductFormPageComponent implements OnInit {
     if (this.isEdit) {
       const product = await this.productsService.getProductById(this.productId!);
       if (!product) return;
-      this.productId = product.id; // ✅ guardo el id para el PUT
+      this.productId = product.id; // guardo el id para el PUT
       // Cargamos el form
       this.form = {
   ...this.form,
@@ -57,24 +81,16 @@ export class ProductFormPageComponent implements OnInit {
   price: Number(product.price),
   categoryId: Number(product.categoryId),
   featured: !!(product.featured ?? product.isFeatured),
-  labels: product.labels ?? [],
+  labels: (product.labels ?? []) as ProductLabel[],
   recommendedFor: Number(product.recommendedFor ?? product.recomendedFor ?? 0),
   discount: Number(product.discount ?? 0),
   hasHappyHour: !!product.hasHappyHour,
 };
 
-      console.log("FORM EN EDIT:", this.form);
-      console.log("PRODUCTO CARGADO:",product.name,
-  "description:", product.description,
-  "price:", product.price,
-  "categoryId:", Number(product.categoryId),
-  "featured:", !!(product.featured ?? product.isFeatured),
-  "labels:", product.labels ?? [],
-  "recommendedFor:", Number(product.recommendedFor ?? product.recomendedFor ?? 0),
-  "discount:", Number(product.discount ?? 0),
-  "hasHappyHour:", !!product.hasHappyHour,);
+      
     }
   }
+
 
   async save() {
     if (!this.userId) return;

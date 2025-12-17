@@ -51,6 +51,25 @@
             placeholder="Descripción del producto..."
           ></textarea>
         </div>
+        <!-- Labels -->
+<div class="field field-full">
+  <label>Labels</label>
+
+  <div class="checkbox-group">
+    @for (l of labelOptions; track l.value) {
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [checked]="form.labels.includes(l.value)"
+          (change)="onLabelToggle(l.value)"
+        />
+        {{ l.text }}
+      </label>
+    }
+  </div>
+
+  <p class="hint">Podés seleccionar más de un label.</p>
+</div>
 
         <!-- Categoría (SOLO al crear) -->
         @if (!isEdit) {
